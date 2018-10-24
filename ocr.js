@@ -7,11 +7,10 @@ tesseract.process('t_1.png', (err, text) => {
     if(err){
         return console.log("An error occured: ", err);
     }
-    // console.log("here ---");
-    // console.log(text);
+
     const textArray = text.split(" ");
-    // console.log(textArray);
-    // const textArrayLength = textArray.length;
+    console.log(textArray.length, "--------");
+
     console.log(textArray[1]);
 
     google.list({
