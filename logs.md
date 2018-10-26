@@ -12,10 +12,11 @@ So the idea behind this project is to basically create a translation of [*La Soc
 
 # 2018-10-26
 
-All sorts of usefull links:
+All sorts of usefull links - I'll investigate them later:
 
 https://github.com/JulienRioux/in-browser-ML-React-ml5js
 
 https://stackoverflow.com/questions/11944932/how-to-download-a-file-with-node-js-without-using-third-party-libraries
 
 https://github.com/kriasoft/react-starter-kit
+
