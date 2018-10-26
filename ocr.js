@@ -4,6 +4,7 @@ var Scraper = require ('images-scraper')
 
 
 
+
 tesseract.process('t_1.png', (err, text) => {
     if(err){
         return console.log("An error occured: ", err);

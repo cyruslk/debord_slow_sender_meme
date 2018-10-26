@@ -7,3 +7,15 @@ What I call Protocol chaining is related to my understanding of internet: as a n
 ------
 
 So the idea behind this project is to basically create a translation of [*La Société du spectacle*](https://fr.wikipedia.org/wiki/La_Soci%C3%A9t%C3%A9_du_spectacle_(livre)) from original words (transfered and scraped with an OCR code) to Google Image results. Then from these Google Image results, have the images translated back from images to text.
+
+
+
+# 2018-10-26
+
+All sorts of usefull links:
+
+https://github.com/JulienRioux/in-browser-ML-React-ml5js
+
+https://stackoverflow.com/questions/11944932/how-to-download-a-file-with-node-js-without-using-third-party-libraries
+
+https://github.com/kriasoft/react-starter-kit
