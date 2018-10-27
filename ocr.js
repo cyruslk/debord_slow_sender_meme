@@ -1,3 +1,4 @@
+
 var fs = require('fs');
     request = require('request');
 
@@ -5,6 +6,7 @@ var tesseract = require('node-tesseract');
 var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
 
+  
 
 let counter = 4;  
 runProcess();  
@@ -24,7 +26,6 @@ function runProcess(){
           }
       })
       .then(function (res) {
-        // RES IS THE IMAGE
           const currentImageUrl = res[0].thumb_url;  
       
           // writing here the link of the image, may be not necessary
@@ -40,7 +41,6 @@ function runProcess(){
               request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
             });
           };
-      
           download(`${currentImageUrl}`, '01.jpg', function(){
             console.log("02. getting the local version of the img");
           });

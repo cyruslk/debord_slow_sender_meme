@@ -22,21 +22,27 @@ All sorts of usefull links - I'll investigate them later:
 What need to be done  (in sudo code):
 
 1. First, count all the words from the page (of the book) targeted
-
 2. Second, run a loop that will do the same action every X minutes (number of pages?). This action will start from an input (the word) and will create a set of actions. These are the actions:
-
    1. From the word of the page targeted, launch a google Image request. Take the first image link, then write it into a file directory.
-
       1. Here, I'll then need a link to image NPM.
-
    2. Once the image is saved, used the ml5 classifier to guess the image. Once a predication will be made, I'll save the first predication of the image into a file/txt.txt directory.
-
       1. Here, I'll use the fs built-in package.
-
    3. Once the text is in the file/txt.txt directory, upload both the image and the text from the server to the client using loops.
-
       1. For the image, should I use the image itself or a link to the original image?
 
 
 
+## 2018-10-27
+
+I came across [this `issue`](https://github.com/ml5js/ml5-library/issues/74) when I was investigating the **ml5-library** package. Basically, this says that the ml5 needs to be run in the browser because it requires the webgl canvas context to work. It's not a big issue but it changes my plan - which was to do all the "heavy" computation on the server-side and then sends a package to the client with the image link and its *classification* only. Consequently, what I'll do is the following:
+
+1. Wire the server side to a react client app.
+2. Get the image from the server
+3. Use it in the ml5 part
+4. As soon as the classification is done, write the word in the file system
+5. In the meantime, load both the image and its *classification* in the dom.
+
+Q: WHY AM I USING A FILESYSTEM?
+
+A: Because it's more convenient than setting up a database ;-)
 
