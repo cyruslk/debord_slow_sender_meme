@@ -11,8 +11,10 @@
   "dependencies": {
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
+    "image-downloader": "^3.4.1",
     "images-scraper": "^2.0.11",
     "node-tesseract": "^0.2.7",
+    "read-file": "^0.2.0",
     "request": "^2.88.0",
     "tesseract.js": "^1.0.10"
   }
