@@ -42,7 +42,18 @@ I came across [this `issue`](https://github.com/ml5js/ml5-library/issues/74) whe
 4. As soon as the classification is done, write the word in the file system
 5. In the meantime, load both the image and its *classification* in the dom.
 
-Q: WHY AM I USING A FILESYSTEM?
+------
 
-A: Because it's more convenient than setting up a database ;-)
+Q1: WHY AM I USING A FILESYSTEM?
+
+A1: Because it's more convenient than setting up a database ;-)
+
+Q2: DO I NEED A SERVER?
+
+A2: I'm not sure yet.
+
+- tesseract can be run in the browser http://tesseract.projectnaptha.com/
+- I'm not sure for the `images-scraper` package
+
+------
 

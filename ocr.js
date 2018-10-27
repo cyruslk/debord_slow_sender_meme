@@ -1,3 +1,9 @@
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const port = process.env.PORT || 5000;
+const bodyParser = require('body-parser');
+
 
 var fs = require('fs');
     request = require('request');
@@ -7,12 +13,11 @@ var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
 
   
-
-let counter = 4;  
+let counter = 89;  
 runProcess();  
   
 function runProcess(){
-  return tesseract.process('t_1.png', (err, text) => {
+  return tesseract.process('files/CommentairesSurLaSocieteDuSpectacle-01.png', (err, text) => {
       if(err){
           return console.log("An error occured: ", err);
       }
@@ -43,9 +48,15 @@ function runProcess(){
           };
           download(`${currentImageUrl}`, '01.jpg', function(){
             console.log("02. getting the local version of the img");
+            // Send it to the browser here
           });
       }).catch(function(err) {
           console.log('err', err);
       });
   });
 }
+
+
+app.listen(port, () => {
+  console.log('listening on port ' + port)
+});
