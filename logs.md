@@ -36,7 +36,7 @@ What need to be done  (in sudo code):
 
 I came across [this `issue`](https://github.com/ml5js/ml5-library/issues/74) when I was investigating the **ml5-library** package. Basically, this says that the ml5 needs to be run in the browser because it requires the webgl canvas context to work. It's not a big issue but it changes my plan - which was to do all the "heavy" computation on the server-side and then sends a package to the client with the image link and its *classification* only. Consequently, what I'll do is the following:
 
-1. Wire the server side to a react client app.
+1. [Wire the server side to a react client app](https://daveceddia.com/create-react-app-express-backend/).
 2. Get the image from the server
 3. Use it in the ml5 part
 4. As soon as the classification is done, write the word in the file system
