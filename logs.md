@@ -58,3 +58,13 @@ A2: I'm not sure yet.
 
 ------
 
+# 2018-10-24
+
+My sudo code:
+
+```sudo
+// Here, read the file before
+// Then, turn the file into a js array
+// Then, push the new URL to the array
+// Then write the file back
+```

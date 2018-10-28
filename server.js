@@ -12,8 +12,14 @@ var tesseract = require('node-tesseract');
 var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
 
+var counter;
+  fs.readFile('db/counter.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    counter = Number(data.toString('utf8'))
+});
 
-let counter = 78;
 runProcess();
 
 function runProcess(){
@@ -31,17 +37,12 @@ function runProcess(){
           }
       })
       .then(function (res) {
-          const currentImageUrl = res[0].thumb_url;
+          const currentImageUrl = `${res[0].thumb_url} `;
 
-          // Here, read the file before
-          // Then, turn the file into a js array
-          // Then, push to the array the new URL
-          // Then write the all file back
-
-          // writing here the link of the image, may be not necessary
-          fs.writeFile('db/links.txt', currentImageUrl, function(err) {
-            console.log("01. writing the link of the img to the db/links.txt");
-          })
+          fs.appendFile('db/links.txt', currentImageUrl, function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+          });
 
           // Downloading the img to the filesystem
           var download = function(uri, filename, callback){
@@ -51,24 +52,27 @@ function runProcess(){
               request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
             });
           };
-          download(`${currentImageUrl}`, '01.jpg', function(){
+          download(`${currentImageUrl}`, 'img.jpg', function(){
             console.log("02. getting the local version of the img");
-            // Send it to the browser here
+            fs.writeFile('db/counter.txt', `${counter+1}`, function(err) {
+              console.log("incrementing the counter");
+            })
           });
       }).catch(function(err) {
           console.log('err', err);
       });
+
   });
 }
 
-// get from the filesystem the list of images link
-const imagesLinks = [
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk3zvdT81EXoAdbDiJG3Qx7jyXnY5iIm5dIiGG-8PDHBaujEMaOw",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqLsA_GWp0q_V94_uzxwyN1wm7qtz503fibHqCB1O8XJnXyEDywQ",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJtwTQ1Rl4NYhdKvg86U8-_pYxkEBuq6Jx76Q4Og-7NMekHfelxg",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDkJBRK5ludjSYFYpWqm4xfAmMoH2Ap8UEHfYn5hisBS8U8DvC8Q",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41NE2pdAd_-801AyjFuuXye6TKFUENRjQxXlXC3l0PR8lQIKFFg"
-]
+var imagesLinks;
+  fs.readFile('db/links.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    imagesLinks = data.toString('utf8').split(" ");
+});
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: imagesLinks });
 });
