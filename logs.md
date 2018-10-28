@@ -18,6 +18,7 @@ All sorts of usefull links - I'll investigate them later:
 - https://www.npmjs.com/package/image-downloader
 - https://stackoverflow.com/questions/11944932/how-to-download-a-file-with-node-js-without-using-third-party-libraries
 - https://github.com/kriasoft/react-starter-kit
+- https://medium.freecodecamp.org/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0
 
 What need to be done  (in sudo code):
 

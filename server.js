@@ -12,10 +12,10 @@ var tesseract = require('node-tesseract');
 var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
 
-  
-let counter = 89;  
-runProcess();  
-  
+
+let counter = 89;
+runProcess();
+
 function runProcess(){
   return tesseract.process('files/CommentairesSurLaSocieteDuSpectacle-01.png', (err, text) => {
       if(err){
@@ -31,13 +31,13 @@ function runProcess(){
           }
       })
       .then(function (res) {
-          const currentImageUrl = res[0].thumb_url;  
-      
+          const currentImageUrl = res[0].thumb_url;
+
           // writing here the link of the image, may be not necessary
           fs.writeFile('db/links.txt', currentImageUrl, function(err) {
             console.log("01. writing the link of the img to the db/links.txt");
           })
-      
+
           // Downloading the img to the filesystem
           var download = function(uri, filename, callback){
             request.head(uri, function(err, res, body){
@@ -56,6 +56,9 @@ function runProcess(){
   });
 }
 
+app.get('/api/hello', (req, res) => {
+  res.send({ express: 'Hello From Express' });
+});
 
 app.listen(port, () => {
   console.log('listening on port ' + port)
