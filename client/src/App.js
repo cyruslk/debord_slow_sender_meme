@@ -25,15 +25,25 @@ class App extends Component {
   };
 
   render() {
-    return (
-      <div className="App">
-        <section className="container_imgs">
-        <img src={this.state.response[0]} />
-        <img src={this.state.response[1]} />
-        <img src={this.state.response[2]} />
-        </section>
-      </div>
-    );
+    if(this.state.response.length === 0){
+      return (
+        <div>
+          LOADING
+        </div>
+      )
+    }else{
+      const imgs = this.state.response.map((ele, index) => {
+        return (
+          <img src={ele} key={index} />
+        )
+      })
+      return (
+        <div>
+            {imgs}
+        </div>
+      )
+    }
+
   }
 }
 
