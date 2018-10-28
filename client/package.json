@@ -1,29 +1,26 @@
 {
-  "name": "debord_slow_sender",
-  "version": "1.0.0",
-  "proxy": "http://localhost:5000",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "name": "client",
+  "version": "0.1.0",
+  "proxy": "http://localhost:5000/",
+  "private": true,
   "dependencies": {
-    "@tensorflow-models/mobilenet": "^0.2.2",
-    "@tensorflow/tfjs": "^0.13.3",
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "file-system": "^2.2.2",
-    "fs": "0.0.1-security",
-    "http": "0.0.0",
-    "image-downloader": "^3.4.1",
-    "images-scraper": "^2.0.11",
-    "ml5": "^0.1.1",
-    "node-tesseract": "^0.2.7",
-    "read-file": "^0.2.0",
-    "request": "^2.88.0",
-    "socket.io": "^2.1.1",
-    "tesseract.js": "^1.0.10"
-  }
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-scripts": "2.0.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
