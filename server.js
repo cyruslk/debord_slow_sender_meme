@@ -33,6 +33,11 @@ function runProcess(){
       .then(function (res) {
           const currentImageUrl = res[0].thumb_url;
 
+          // Here, read the file before
+          // Then, turn the file into a js array
+          // Then, push to the array the new URL
+          // Then write the all file back
+
           // writing here the link of the image, may be not necessary
           fs.writeFile('db/links.txt', currentImageUrl, function(err) {
             console.log("01. writing the link of the img to the db/links.txt");
