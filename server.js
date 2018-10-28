@@ -20,7 +20,9 @@ var counter;
     counter = Number(data.toString('utf8'))
 });
 
+// What time? What will be the delay?
 runProcess();
+
 
 function runProcess(){
   return tesseract.process('files/CommentairesSurLaSocieteDuSpectacle-01.png', (err, text) => {
@@ -52,7 +54,7 @@ function runProcess(){
               request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
             });
           };
-          download(`${currentImageUrl}`, 'img.jpg', function(){
+          download(`${currentImageUrl}`, 'client/src/img.jpg', function(){
             console.log("02. getting the local version of the img");
             fs.writeFile('db/counter.txt', `${counter+1}`, function(err) {
               console.log("incrementing the counter");
@@ -71,9 +73,10 @@ var imagesLinks;
         throw err;
     }
     imagesLinks = data.toString('utf8').split(" ");
+    console.log(imagesLinks.length, "");
 });
 
-app.get('/api/hello', (req, res) => {
+app.get('/api/img', (req, res) => {
   res.send({ express: imagesLinks });
 });
 

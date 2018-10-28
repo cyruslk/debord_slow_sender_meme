@@ -1,49 +1,39 @@
 import React, { Component } from 'react';
-
-import logo from './logo.svg';
-
 import './App.css';
+import img from "./img.jpg";
+import * as ml5 from "ml5";
 
 class App extends Component {
-  state = {
-    response: ''
-  };
 
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
+  constructor(props) {
+   super(props);
+   this.state = {
+     prediction: ""
+   };
+  }
+  classifyImg = () => {
+    const classifier = ml5.imageClassifier('MobileNet', modelLoaded);
+    function modelLoaded() {
+      console.log('Model Loaded!');
+    }
+    const image = document.getElementById('image');
+    classifier.predict(image, 5, function(err, results) {
+      // Here post in the fs the word
+      console.log(results);
+
+    })
   }
 
-  callApi = async () => {
-    const response = await fetch('/api/hello');
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
+  componentDidMount(){
+    this.classifyImg();
+  }
 
   render() {
-    if(this.state.response.length === 0){
-      return (
-        <div>
-          LOADING
-        </div>
-      )
-    }else{
-      const imgs = this.state.response.map((ele, index) => {
-        return (
-          <img src={ele} key={index} />
-        )
-      })
-      return (
-        <div>
-            {imgs}
-        </div>
-      )
-    }
-
+    return (
+      <div className="App">
+        <img src={ img } id="image" style={{display: "none"}} alt="" />
+      </div>
+    );
   }
 }
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "images-scraper": "^2.0.11",
+    "ml5": "^0.1.1",
     "node-tesseract": "^0.2.7",
     "request": "^2.88.0"
   },
