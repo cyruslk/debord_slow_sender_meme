@@ -4,6 +4,8 @@ const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
 
+const io = require('socket.io')();
+
 
 var fs = require('fs');
     request = require('request');
@@ -22,7 +24,6 @@ var counter;
 
 // What time? What will be the delay?
 runProcess();
-
 
 function runProcess(){
   return tesseract.process('files/CommentairesSurLaSocieteDuSpectacle-01.png', (err, text) => {
@@ -45,7 +46,6 @@ function runProcess(){
             if (err) throw err;
             console.log('Saved!');
           });
-
           // Downloading the img to the filesystem
           var download = function(uri, filename, callback){
             request.head(uri, function(err, res, body){
@@ -67,18 +67,22 @@ function runProcess(){
   });
 }
 
-var imagesLinks;
-  fs.readFile('db/links.txt', function read(err, data) {
-    if (err) {
-        throw err;
-    }
-    imagesLinks = data.toString('utf8').split(" ");
-    console.log(imagesLinks.length, "");
-});
+  var imagesLinks;
+    fs.readFile('db/links.txt', function read(err, data) {
+      if (err) {
+          throw err;
+      }
+      imagesLinks = data.toString('utf8').split(" ");
+      console.log(imagesLinks.length, "");
+  });
+  app.get('/api/img', (req, res) => {
+    res.send({ express: imagesLinks });
+  });
 
-app.get('/api/img', (req, res) => {
-  res.send({ express: imagesLinks });
-});
+  app.get('/api/classifier', (req, res) => {
+    console.log("received");
+    console.log(res);
+  });
 
 app.listen(port, () => {
   console.log('listening on port ' + port)

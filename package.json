@@ -10,11 +10,13 @@
     "dev": "concurrently --kill-others-on-fail \"npm server\" \"npm client\""
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "express": "^4.16.2",
     "images-scraper": "^2.0.11",
     "ml5": "^0.1.1",
     "node-tesseract": "^0.2.7",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
