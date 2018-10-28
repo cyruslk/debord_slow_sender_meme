@@ -27,7 +27,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <p className="App-intro">{this.state.response}</p>
+        <section className="container_imgs">
+        <img src={this.state.response[0]} />
+        <img src={this.state.response[1]} />
+        <img src={this.state.response[2]} />
+        </section>
       </div>
     );
   }

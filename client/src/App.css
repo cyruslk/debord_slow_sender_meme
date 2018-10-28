@@ -30,3 +30,10 @@
     transform: rotate(360deg);
   }
 }
+
+
+.container_imgs{
+    width: 50vw;
+    border-right: 1px solid;
+    height: 100vh;
+}

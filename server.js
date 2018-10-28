@@ -13,7 +13,7 @@ var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
 
 
-let counter = 89;
+let counter = 10;
 runProcess();
 
 function runProcess(){
@@ -56,8 +56,14 @@ function runProcess(){
   });
 }
 
+// get from the filesystem the list of images link
+const imagesLinks = [
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJtwTQ1Rl4NYhdKvg86U8-_pYxkEBuq6Jx76Q4Og-7NMekHfelxg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDkJBRK5ludjSYFYpWqm4xfAmMoH2Ap8UEHfYn5hisBS8U8DvC8Q",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41NE2pdAd_-801AyjFuuXye6TKFUENRjQxXlXC3l0PR8lQIKFFg"
+]
 app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  res.send({ express: imagesLinks });
 });
 
 app.listen(port, () => {
