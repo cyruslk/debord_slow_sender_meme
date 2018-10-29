@@ -119,12 +119,13 @@ Stuffs that need to be done:
 
 - [ ] Trigger the server side at a certain interval (number of pages). When both the link and the image are written, (maybe) use `sockets` to launch the client side ml5 code.
   - [ ] (in other words, iNCREMENT THE COUNTER BY ITSELF)
-- [ ] Isolate the first guess in the prediction package coming from the client (targeting the `,` strings of characters ).
-- [ ] Write the prediction words to db folder.
-- [ ] In the meantime (when the computation is happening/not happening), display both the images (on the left of the screen?) and the text (on the right?) coming from the server side doing a filesystem request. What I envision now is a simple ternary render with a `fetch` sending the data from the server to the state storage.
+- [x] Isolate the first guess in the prediction package coming from the client (targeting the `,` strings of characters ).
+- [x] Write the prediction words to db folder.
+- [x] In the meantime (when the computation is happening/not happening), display both the images (on the left of the screen?) and the text (on the right?) coming from the server side doing a filesystem request. What I envision now is a simple ternary render with a `fetch` sending the data from the server to the state storage.
 - [ ] As soon as the computation is done, send a `socket` to update the state with the new data. This will refresh the page automatically and display the new word + the new prediction 
 - [ ] ***Turn pages*** - when the counter equals the number of words of the page, make the `node-tesseract`
 - [ ] Work on the UI (or not)
+  - [ ] ~~First jam~~
 
 Stuffs that need to be decided:
 
@@ -138,4 +139,21 @@ Stuffs that need to be decided:
 
 Stuffs that need to be fixed:
 
-- [ ] It's only when the prediction is made than the counter should incremente
+- [ ] It's only when the prediction is made than the counter should increment
+
+
+# 2018-10-29
+
+
+The core functionalities of the bot are done. When I was working on the design of the bot's interface, I realised that google images are interesting but there could be other alternatives.
+
+Other interesting alternatives so far
+
+- Pixabay: https://pixabay.com/fr/
+
+  - https://www.npmjs.com/package/pixabay-api
+
+
+------
+
+Since the inital text is in French, the outputted text could be in French. I could consequently translate the ml5 classifier in French using a [translation api](https://www.npmjs.com/package/google-translate-api)?

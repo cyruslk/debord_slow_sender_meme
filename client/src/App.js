@@ -6,13 +6,15 @@ import * as ml5 from "ml5";
 
 class App extends Component {
   state = {
-    predictions: []  // Set the empty array predictions state
+    predictions: [],
+    responseImg: "",
+    responseTxts: ""
+
   }
 
   setPredictions = (pred) => {
     this.setState({
-      predictions: pred,
-      response: ""
+      predictions: pred
     });
   }
 
@@ -36,7 +38,18 @@ class App extends Component {
     fetch('/api/img')
     .then((res) => { return res.json(); })
     .then((responseJson) => {
-      console.log(responseJson, "----");
+      const arrayOfLinks = responseJson.express;
+      this.setState({
+        responseImg: arrayOfLinks
+      })
+    });
+    fetch('/api/words')
+    .then((res) => { return res.json(); })
+    .then((responseJson) => {
+      const arrayOfWords = responseJson.express;
+      this.setState({
+        responseTxts: arrayOfWords
+      })
     });
   }
 
@@ -57,28 +70,39 @@ class App extends Component {
      })
    }
 
+
   render() {
       if(this.state.predictions.length === 0){
         return (
           <div className="words">
-          <img src={ img } id="image" style={{display: "none"}} alt="" />
+            <img src={ img } id="image" style={{display: "none"}} alt="" />
             loading
           </div>
         )
       }else{
-        console.log(this.state.predictions);
         const mostAccurate =  this.state.predictions[0]["className"];
-        // console.log(mostAccurate);
         this.sendDataBackToServer(mostAccurate);
-        console.log(this.state.response, "----");
-       //  const imgs = this.state.response.map((ele, index) => {
-       //   return (
-       //     <img src={ele} key={index} />
-       //   )
-       // })
+        console.log("predictions sent to the server");
+
+        const imgs = this.state.responseImg.map((ele, index) => {
+            return (
+              <img src={ele} key={index} />
+            )
+          })
+        const txts = this.state.responseTxts.map((ele, index) => {
+            return (
+              <span key={index}>{ele} </span>
+            )
+          })
+
        return (
-         <div>
-            sent
+         <div className="main">
+            <section className="left_side">
+              {imgs}
+            </section>
+            <section className="right_side">
+              {txts}
+            </section>
          </div>
        )
       }

@@ -76,7 +76,6 @@ var imagesLinks;
         throw err;
     }
     imagesLinks = data.toString('utf8').split(" ");
-    console.log(imagesLinks.length, "");
 });
 app.get('/api/img', (req, res) => {
   res.send({ express: imagesLinks });
@@ -91,8 +90,18 @@ app.post('/classifier', (req, res) => {
     console.log('Saved: db/words.txt');
   });
 })
-// Now, take the content from the db/words.txt and
-//send it back to the client in order to be displayed
+
+var wordsProcessed;
+  fs.readFile('db/words.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    wordsProcessed = data.toString('utf8').split(" ");
+});
+app.get('/api/words', (req, res) => {
+  res.send({ express: wordsProcessed });
+});
+
 
 app.listen(port, () => {
   console.log('listening on port ' + port)
