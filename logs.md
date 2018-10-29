@@ -115,9 +115,27 @@ For now, what is done on the projet is the following:
      )
 ```
 
-What I now need to do:
+Stuffs that need to be done:
 
 - [ ] Trigger the server side at a certain interval (number of pages). When both the link and the image are written, (maybe) use `sockets` to launch the client side ml5 code.
+  - [ ] (in other words, iNCREMENT THE COUNTER BY ITSELF)
+- [ ] Isolate the first guess in the prediction package coming from the client (targeting the `,` strings of characters ).
+- [ ] Write the prediction words to db folder.
 - [ ] In the meantime (when the computation is happening/not happening), display both the images (on the left of the screen?) and the text (on the right?) coming from the server side doing a filesystem request. What I envision now is a simple ternary render with a `fetch` sending the data from the server to the state storage.
 - [ ] As soon as the computation is done, send a `socket` to update the state with the new data. This will refresh the page automatically and display the new word + the new prediction 
+- [ ] ***Turn pages*** - when the counter equals the number of words of the page, make the `node-tesseract`
 - [ ] Work on the UI (or not)
+
+Stuffs that need to be decided:
+
+- [ ] When will the process start?
+   - Numbers of words = numbers of the interval (seconds)? 
+   - Numbers of pages from the book = numbers of the interval (seconds)? 
+   - Index of the words = numbers of the interval (seconds)? This could be a small project in itself
+- [ ] When the user access the page, what appears first? 
+  - Do I wait until the processed *image -> word* get sent to the server, written in a file and  sent back to the client? In the meantime a `loading` screen will be displayed (this will be quite long, could be interesting (or very boring)).
+  - Or display all the content from the files coming from the backend WHILE doing the computation? Then refresh the page with a `socket.emit()/socket.on();`
+
+Stuffs that need to be fixed:
+
+- [ ] It's only when the prediction is made than the counter should incremente

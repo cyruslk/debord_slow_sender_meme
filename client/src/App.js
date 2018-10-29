@@ -11,7 +11,8 @@ class App extends Component {
 
   setPredictions = (pred) => {
     this.setState({
-      predictions: pred
+      predictions: pred,
+      response: ""
     });
   }
 
@@ -31,7 +32,15 @@ class App extends Component {
 
   componentDidMount(){
     this.classifyImg();
+
+    fetch('/api/img')
+    .then((res) => { return res.json(); })
+    .then((responseJson) => {
+      console.log(responseJson, "----");
+    });
   }
+
+
 
   sendDataBackToServer = (passedData) => {
   const data = {
@@ -60,14 +69,18 @@ class App extends Component {
         console.log(this.state.predictions);
         const mostAccurate =  this.state.predictions[0]["className"];
         // console.log(mostAccurate);
-
         this.sendDataBackToServer(mostAccurate);
-        return (
-          <div className="words">
-          <img src={ img } id="image" style={{display: "none"}} alt="" />
+        console.log(this.state.response, "----");
+       //  const imgs = this.state.response.map((ele, index) => {
+       //   return (
+       //     <img src={ele} key={index} />
+       //   )
+       // })
+       return (
+         <div>
             sent
-          </div>
-        )
+         </div>
+       )
       }
   }
 }

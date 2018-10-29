@@ -3,18 +3,12 @@ const app = express();
 const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
-
-const io = require('socket.io')();
-
-
 var fs = require('fs');
     request = require('request');
 
 
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
-//enable CORS
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
  res.header("Access-Control-Allow-Origin", "*");
  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -33,7 +27,7 @@ var counter;
     counter = Number(data.toString('utf8'))
 });
 
-// What time? What will be the delay?
+// Q1: DELAY
 runProcess();
 
 function runProcess(){
@@ -55,13 +49,12 @@ function runProcess(){
 
           fs.appendFile('db/links.txt', currentImageUrl, function (err) {
             if (err) throw err;
-            console.log('Saved!');
+            console.log('Saved: db/links.txt');
           });
-          // Downloading the img to the filesystem
           var download = function(uri, filename, callback){
             request.head(uri, function(err, res, body){
-              console.log('content-type:', res.headers['content-type']);
-              console.log('content-length:', res.headers['content-length']);
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
               request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
             });
           };
@@ -74,7 +67,6 @@ function runProcess(){
       }).catch(function(err) {
           console.log('err', err);
       });
-
   });
 }
 
@@ -92,8 +84,15 @@ app.get('/api/img', (req, res) => {
 
 app.post('/classifier', (req, res) => {
   console.log(req.body);
-})
+  const firstPrediction = req.body.data.split(", ")[0];
 
+  fs.appendFile('db/words.txt', `${firstPrediction} `, function (err) {
+    if (err) throw err;
+    console.log('Saved: db/words.txt');
+  });
+})
+// Now, take the content from the db/words.txt and
+//send it back to the client in order to be displayed
 
 app.listen(port, () => {
   console.log('listening on port ' + port)
