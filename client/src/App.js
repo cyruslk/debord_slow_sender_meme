@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import img from "./img.jpg";
-// Importing ml5.js as ml5
 import * as ml5 from "ml5";
-import axios from 'axios';
 
 
 class App extends Component {
@@ -35,9 +33,20 @@ class App extends Component {
     this.classifyImg();
   }
 
-  sendDataBackToServer = (stuffToSend) => {
-    return axios.post('/api/classifier', stuffToSend);
-  }
+  sendDataBackToServer = (passedData) => {
+  const data = {
+       data: passedData
+   };
+  fetch('/classifier', {
+       method: 'POST',
+       body: JSON.stringify(data),
+       headers: {
+         'content-type': 'application/json'
+       },
+     }).then((res) => {
+       console.log("successfully sent to db");
+     })
+   }
 
   render() {
       if(this.state.predictions.length === 0){
@@ -49,13 +58,16 @@ class App extends Component {
         )
       }else{
         console.log(this.state.predictions);
+        const mostAccurate =  this.state.predictions[0]["className"];
+        // console.log(mostAccurate);
+
+        this.sendDataBackToServer(mostAccurate);
         return (
           <div className="words">
           <img src={ img } id="image" style={{display: "none"}} alt="" />
             sent
           </div>
         )
-        this.sendDataBackToServer(this.state.predictions);
       }
   }
 }

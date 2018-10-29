@@ -10,6 +10,17 @@ const io = require('socket.io')();
 var fs = require('fs');
     request = require('request');
 
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+//enable CORS
+app.use(function(req, res, next) {
+ res.header("Access-Control-Allow-Origin", "*");
+ res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+ next();
+});
+
 var tesseract = require('node-tesseract');
 var Scraper = require ('images-scraper')
   , google = new Scraper.Google();
@@ -67,22 +78,22 @@ function runProcess(){
   });
 }
 
-  var imagesLinks;
-    fs.readFile('db/links.txt', function read(err, data) {
-      if (err) {
-          throw err;
-      }
-      imagesLinks = data.toString('utf8').split(" ");
-      console.log(imagesLinks.length, "");
-  });
-  app.get('/api/img', (req, res) => {
-    res.send({ express: imagesLinks });
-  });
+var imagesLinks;
+  fs.readFile('db/links.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    imagesLinks = data.toString('utf8').split(" ");
+    console.log(imagesLinks.length, "");
+});
+app.get('/api/img', (req, res) => {
+  res.send({ express: imagesLinks });
+});
 
-  app.get('/api/classifier', (req, res) => {
-    console.log("received");
-    console.log(res);
-  });
+app.post('/classifier', (req, res) => {
+  console.log(req.body);
+})
+
 
 app.listen(port, () => {
   console.log('listening on port ' + port)

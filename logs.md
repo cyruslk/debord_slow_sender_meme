@@ -26,14 +26,15 @@ What need to be done  (in sudo code):
 2. Second, run a loop that will do the same action every X minutes (number of pages?). This action will start from an input (the word) and will create a set of actions. These are the actions:
    1. From the word of the page targeted, launch a google Image request. Take the first image link, then write it into a file directory.
       1. Here, I'll then need a link to image NPM.
-   2. Once the image is saved, used the ml5 classifier to guess the image. Once a predication will be made, I'll save the first predication of the image into a file/txt.txt directory.
+   2. Once the image is saved, used the ml5 classifier to guess the image. Once a prediction will be made, I'll save the first prediction of the image into a file/txt.txt directory.
       1. Here, I'll use the fs built-in package.
    3. Once the text is in the file/txt.txt directory, upload both the image and the text from the server to the client using loops.
       1. For the image, should I use the image itself or a link to the original image?
 
 
 
-## 2018-10-27
+# 2018-10-27
+
 
 I came across [this `issue`](https://github.com/ml5js/ml5-library/issues/74) when I was investigating the **ml5-library** package. Basically, this says that the ml5 needs to be run in the browser because it requires the webgl canvas context to work. It's not a big issue but it changes my plan - which was to do all the "heavy" computation on the server-side and then sends a package to the client with the image link and its *classification* only. Consequently, what I'll do is the following:
 
@@ -58,7 +59,9 @@ A2: I'm not sure yet.
 
 ------
 
-# 2018-10-24
+
+
+# 2018-10-28
 
 My sudo code:
 
@@ -68,3 +71,53 @@ My sudo code:
 // Then, push the new URL to the array
 // Then write the file back
 ```
+Today, I work mostly on the wiring between the ml5 machine learning - that needs to be run on the brower because of webGL - and the server side rendering.
+
+For now, what is done on the projet is the following:
+
+1. From the `db` folder, the server reads the content of the counter.txt (a number).
+
+2. It uses the number to perform the request on google images. It gets the first image of the list. It saves the image in the directory `client/src/img.jpg`. It also saves it links into the `db` folder, in `db/links.txt`. It saves the link with a space after, to be able to quickly run the `split(" ") ` function and converts the .txt file into a JavaScript array of links.
+
+3. It send all the links to the client side using [express](https://github.com/expressjs/express) and its res.send function.
+
+   ```
+   app.get('/api/img', (req, res) => {
+     res.send({ express: imagesLinks });
+   });
+   ```
+
+4. In the client side (`client/src/App.js`), ml5 reads the image stored in `client/src/img.jpg`. Once its done, it send its prediction to  the server side code, here
+
+   ```
+     sendDataBackToServer = (passedData) => {
+     const data = {
+          data: passedData
+      };
+     fetch('/classifier', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json'
+          },
+        }).then((res) => {
+          console.log("successfully sent to db");
+        })
+      }
+   ```
+
+5. In the master's branch, all the links received from the server are stored in the state, mapped, and then displayed on the screen via this code:
+
+```
+ const imgs = this.state.response.map((ele, index) => {
+     return (
+     <img src={ele} key={index} />
+     )
+```
+
+What I now need to do:
+
+- [ ] Trigger the server side at a certain interval (number of pages). When both the link and the image are written, (maybe) use `sockets` to launch the client side ml5 code.
+- [ ] In the meantime (when the computation is happening/not happening), display both the images (on the left of the screen?) and the text (on the right?) coming from the server side doing a filesystem request. What I envision now is a simple ternary render with a `fetch` sending the data from the server to the state storage.
+- [ ] As soon as the computation is done, send a `socket` to update the state with the new data. This will refresh the page automatically and display the new word + the new prediction 
+- [ ] Work on the UI (or not)
