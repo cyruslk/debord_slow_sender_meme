@@ -20,7 +20,7 @@ All sorts of usefull links - I'll investigate them later:
 - https://github.com/kriasoft/react-starter-kit
 - https://medium.freecodecamp.org/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0
 
-What need to be done  (in sudo code):
+What need to be done  (in pseudo code):
 
 1. First, count all the words from the page (of the book) targeted
 2. Second, run a loop that will do the same action every X minutes (number of pages?). This action will start from an input (the word) and will create a set of actions. These are the actions:
@@ -63,7 +63,7 @@ A2: I'm not sure yet.
 
 # 2018-10-28
 
-My sudo code:
+My pseudo code:
 
 ```sudo
 // Here, read the file before
@@ -152,7 +152,6 @@ Other interesting alternatives so far
 - Pixabay: https://pixabay.com/fr/
 
   - https://www.npmjs.com/package/pixabay-api
-
 
 ------
 
