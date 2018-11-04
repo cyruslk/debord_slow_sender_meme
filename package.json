@@ -15,6 +15,7 @@
     "images-scraper": "^2.0.11",
     "ml5": "^0.1.1",
     "node-tesseract": "^0.2.7",
+    "pixabay-api": "^1.0.4",
     "request": "^2.88.0",
     "socket.io": "^2.1.1"
   },

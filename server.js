@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 var fs = require('fs');
     request = require('request');
 
+const searchImages = require('pixabay-api');
+const axios = require('axios');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,9 +18,10 @@ app.use(function(req, res, next) {
  next();
 });
 
+
 var tesseract = require('node-tesseract');
-var Scraper = require ('images-scraper')
-  , google = new Scraper.Google();
+// var Scraper = require ('images-scraper')
+//   , google = new Scraper.Google();
 
 var counter;
   fs.readFile('db/counter.txt', function read(err, data) {
@@ -36,37 +40,42 @@ function runProcess(){
           return console.log("An error occured: ", err);
       }
       const textArray = text.split(" ");
-      google.list({
-          keyword: `${textArray[counter]}`,
-          num: 1,
-          detail: true,
-          nightmare: {
-              show: false
-          }
+      // google.list({
+      //     keyword: `${textArray[counter]}`,
+      //     num: 1,
+      //     detail: true,
+      //     nightmare: {
+      //         show: false
+      //     }
+      // })
+      axios.get(`https://pixabay.com/api/?key=10587151-d81b4435d77a6d3a85dc0efd6&q=${textArray[counter]}&image_type=photo')
+      .then(function(res) {
+        console.log(res.hits.[0]);
       })
-      .then(function (res) {
-          const currentImageUrl = `${res[0].thumb_url} `;
-
-          fs.appendFile('db/links.txt', currentImageUrl, function (err) {
-            if (err) throw err;
-            console.log('Saved: db/links.txt');
-          });
-          var download = function(uri, filename, callback){
-            request.head(uri, function(err, res, body){
-            console.log('content-type:', res.headers['content-type']);
-            console.log('content-length:', res.headers['content-length']);
-              request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-            });
-          };
-          download(`${currentImageUrl}`, 'client/src/img.jpg', function(){
-            console.log("02. getting the local version of the img");
-            fs.writeFile('db/counter.txt', `${counter+1}`, function(err) {
-              console.log("incrementing the counter");
-            })
-          });
-      }).catch(function(err) {
-          console.log('err', err);
-      });
+      // .then(function (res) {
+      //     // const currentImageUrl = `${res[0].thumb_url} `;
+      //     const currentImageUrl = "";
+      //
+      //     fs.appendFile('db/links.txt', currentImageUrl, function (err) {
+      //       if (err) throw err;
+      //       console.log('Saved: db/links.txt');
+      //     });
+      //     var download = function(uri, filename, callback){
+      //       request.head(uri, function(err, res, body){
+      //       console.log('content-type:', res.headers['content-type']);
+      //       console.log('content-length:', res.headers['content-length']);
+      //         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+      //       });
+      //     };
+      //     download(`${currentImageUrl}`, 'client/src/img.jpg', function(){
+      //       console.log("02. getting the local version of the img");
+      //       fs.writeFile('db/counter.txt', `${counter+1}`, function(err) {
+      //         console.log("incrementing the counter");
+      //       })
+      //     });
+      // }).catch(function(err) {
+      //     console.log('err', err);
+      // });
   });
 }
 

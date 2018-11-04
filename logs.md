@@ -156,3 +156,8 @@ Other interesting alternatives so far
 ------
 
 Since the inital text is in French, the outputted text could be in French. I could consequently translate the ml5 classifier in French using a [translation api](https://www.npmjs.com/package/google-translate-api)?
+
+
+
+# 2018-10-29
+
