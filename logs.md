@@ -162,7 +162,7 @@ Since the inital text is in French, the outputted text could be in French. I cou
 # 2018-11-04
 
 **Reframing 1:**
-Right now I'm in the process of finding a more interesting approach than regular google images. There's something with [stockphots](https://pbs.twimg.com/profile_images/949787136030539782/LnRrYf6e_400x400.jpg) that I like a lot and I'm interested to explore. I'm not sure of the rationale behind this yet, but for now I'll say that it's related to the their generic characteristics. They often illustrate broad concepts in a quite inaccurate and absurd (or even uncanny) way. I also like a lot their marks - It gives them a very strange presence. 
+Right now I'm in the process of finding a more interesting approach than regular google images. There's something with [stockphotos](https://pbs.twimg.com/profile_images/949787136030539782/LnRrYf6e_400x400.jpg) that I like a lot and I'm interested to explore. I'm not sure of the rationale behind this yet, but for now I'll say that it's related to the their generic characteristics. They often illustrate broad concepts in a quite inaccurate and absurd (or even uncanny) way. I also like a lot their marks - It gives them a very strange presence. 
 
 **Reframing 2:**
 On another note, I'm researching a lot on the [MDMA](https://www.gamesasresearch.com/mdma) framework I'm using through my projects and on the tools I could use inside/along MDMA to "track the design process" of my researches. Reflecting on my previous logs where i embeded also both `code` and `pseudo code`, I realised that these assets were quite important to address as well. Detailed notes and online diary are, from my perspective, absolutely crucial; but it sometimes can be a bit frustrating to navigate between these kinds of reframing and what appears **on the code level**, during these ideation stages where ideas/attempts are embodied in code.
@@ -210,4 +210,8 @@ Sun Nov 04 2018 19:04:18 GMT-0500 (UTC−05:00)
 // Group of comments 2
 // Group of commens 2
 ```
+
+------
+
+**Reframing 1.2:**
 
