@@ -215,3 +215,6 @@ Sun Nov 04 2018 19:04:18 GMT-0500 (UTC−05:00)
 
 **Reframing 1.2:**
 
+For now,  this is how the images are displayed in the site.
+
+
