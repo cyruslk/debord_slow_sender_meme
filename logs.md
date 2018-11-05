@@ -215,6 +215,13 @@ Sun Nov 04 2018 19:04:18 GMT-0500 (UTC−05:00)
 
 **Reframing 1.2:**
 
-For now,  this is how the images are displayed in the site.
+For now,  this is what happens on the website:
+
+1. First, the website displays this loading page. It waits until the ml5 script sends its predictions to the server. 
 
 
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender/pixabay/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-04%20%C3%A0%2019.26.49.png)
+
+   2. Then, the website displays both the images at the left and the text on the right.
+
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender/pixabay/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-04%20%C3%A0%2019.28.37.png)
