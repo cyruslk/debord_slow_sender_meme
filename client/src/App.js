@@ -59,6 +59,7 @@ class App extends Component {
   const data = {
        data: passedData
    };
+   console.log(data, "||||");
   fetch('/classifier', {
        method: 'POST',
        body: JSON.stringify(data),
@@ -81,6 +82,7 @@ class App extends Component {
         )
       }else{
         const mostAccurate =  this.state.predictions[0]["className"];
+        console.log(mostAccurate, "-------");
         this.sendDataBackToServer(mostAccurate);
         console.log("predictions sent to the server");
 
