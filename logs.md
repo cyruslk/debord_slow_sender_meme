@@ -159,5 +159,55 @@ Since the inital text is in French, the outputted text could be in French. I cou
 
 
 
-# 2018-10-29
+# 2018-11-04
+
+**Reframing 1:**
+Right now I'm in the process of finding a more interesting approach than regular google images. There's something with [stockphots](https://pbs.twimg.com/profile_images/949787136030539782/LnRrYf6e_400x400.jpg) that I like a lot and I'm interested to explore. I'm not sure of the rationale behind this yet, but for now I'll say that it's related to the their generic characteristics. They often illustrate broad concepts in a quite inaccurate and absurd (or even uncanny) way. I also like a lot their marks - It gives them a very strange presence. 
+
+**Reframing 2:**
+On another note, I'm researching a lot on the [MDMA](https://www.gamesasresearch.com/mdma) framework I'm using through my projects and on the tools I could use inside/along MDMA to "track the design process" of my researches. Reflecting on my previous logs where i embeded also both `code` and `pseudo code`, I realised that these assets were quite important to address as well. Detailed notes and online diary are, from my perspective, absolutely crucial; but it sometimes can be a bit frustrating to navigate between these kinds of reframing and what appears **on the code level**, during these ideation stages where ideas/attempts are embodied in code.
+
+------
+
+From code to *natural language* reframings expressed in these logs, there's consequently a disruption (that can be problematic). Or, in other words, I think that code's performativity has a crucial role in this analysis and need to addressed as well. For this reason, I came accross a small apparatus that I intend to build in the following days - and test its relevance in the case of the two modems projects I'll work on starting tomorrow.
+
+This apparatus (a script) will do the following.
+
+1. It will be launched as soon as I start working on a specific project. I will use nodemon for this step, which is a package that automatically restarts the node application when a file changes in the directory. As soon as [nodemon](https://www.npmjs.com/package/nodemon) is launched, nothing more do to then.
+
+2. Using [`fs.watch()`](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_fswatcher) which is a method to listen to changes inside a specific working file, I will use a [`regex`](https://www.w3schools.com/jsref/jsref_obj_regexp.asp) to return the changes when `//  `  will be found. When this pattern of characters will be found in what the method returns, it will means that I'm writing a comment in `pseudo-code`. I write comments in `pseudo-code` for several reasons:
+
+   1. When I want to quickly lay down the procedurality of a script and how data should be chained from functions to functions. Example:
+
+      ```
+      // Here, read the file before
+      // Then, turn the file into a js array
+      // Then, push the new URL to the array
+      // Then write the file back		
+      ```
+
+   2. When I need to decide on something and need to go back to it. Example:
+
+      ```
+      // Q1: DELAY
+      ```
+
+------
+
+Isolating these pseudo-proceduralities are good and help us to get closer to code, but they're not code yet. What would be even better is to place them in relation with code, with their embodiment inside code - inside the materiality of the project. 
+
+A way (?) to do this would be consequently  to **retrieve the `//` as well the text after the empty lines that are located after these.**
+
+In all cases, these matchs will be piped into a markdown file with a `new Date()` function converted to a string, in order to keep track of these comments in a chronologic order. This file will be formatted like this:
+
+```
+Sun Nov 04 2018 19:03:20 GMT-0500 (UTC−05:00)
+
+// Comment 1
+
+Sun Nov 04 2018 19:04:18 GMT-0500 (UTC−05:00)
+
+// Group of comments 2
+// Group of commens 2
+```
 
