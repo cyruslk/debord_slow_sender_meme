@@ -59,7 +59,6 @@ class App extends Component {
   const data = {
        data: passedData
    };
-   console.log(data, "||||");
   fetch('/classifier', {
        method: 'POST',
        body: JSON.stringify(data),

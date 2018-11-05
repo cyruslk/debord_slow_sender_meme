@@ -117,23 +117,23 @@ For now, what is done on the projet is the following:
 
 Stuffs that need to be done:
 
-- [ ] Trigger the server side at a certain interval (number of pages). When both the link and the image are written, (maybe) use `sockets` to launch the client side ml5 code.
-  - [ ] (in other words, iNCREMENT THE COUNTER BY ITSELF)
+- [x] Trigger the server side at a certain interval (number of pages). When both the link and the image are written, ~~(maybe) use `sockets` to launch the client side ml5 code.~~
+  - [x] (in other words, iNCREMENT THE COUNTER BY ITSELF)
 - [x] Isolate the first guess in the prediction package coming from the client (targeting the `,` strings of characters ).
 - [x] Write the prediction words to db folder.
 - [x] In the meantime (when the computation is happening/not happening), display both the images (on the left of the screen?) and the text (on the right?) coming from the server side doing a filesystem request. What I envision now is a simple ternary render with a `fetch` sending the data from the server to the state storage.
-- [ ] As soon as the computation is done, send a `socket` to update the state with the new data. This will refresh the page automatically and display the new word + the new prediction 
-- [ ] ***Turn pages*** - when the counter equals the number of words of the page, make the `node-tesseract`
+- [ ] ~~As soon as the computation is done, send a `socket` to update the state with the new data. This will refresh the page automatically and display the new word + the new prediction~~ 
+- [x] ***Turn pages*** - when the counter equals the number of words of the page, make the `node-tesseract`
 - [ ] Work on the UI (or not)
   - [x] ~~First jam~~
 
 Stuffs that need to be decided:
 
-- [ ] When will the process start?
+- [x] When will the process start?
    - Numbers of words = numbers of the interval (seconds)? 
    - Numbers of pages from the book = numbers of the interval (seconds)? 
    - Index of the words = numbers of the interval (seconds)? This could be a small project in itself
-- [ ] When the user access the page, what appears first? 
+- [x] When the user access the page, what appears first? 
   - Do I wait until the processed *image -> word* get sent to the server, written in a file and  sent back to the client? In the meantime a `loading` screen will be displayed (this will be quite long, could be interesting (or very boring)).
   - Or display all the content from the files coming from the backend WHILE doing the computation? Then refresh the page with a `socket.emit()/socket.on();`
 
@@ -175,7 +175,7 @@ This apparatus (taking the form of a node-js server side watcher) will do the fo
 
 1. As soon as I start working on a specific project, It will be launched. I will use `nodemon` for this, which is a [package](https://www.npmjs.com/package/nodemon) that listen to the files and automatically restarts the provided node script when a file changes in the directory. 
 
-2. Using [`fs.watch()`](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_fswatcher) which is a method to listen to changes inside a specific working file, I will use a [`regex`](https://www.w3schools.com/jsref/jsref_obj_regexp.asp) to return only the changes when `//  `  will be found. When this pattern of characters will be found in what the method returns, it will returns the `pseudo-code` I'm writing. EDIT: It will also gets the code that I place in comment.
+2. Using [`fs.watch()`](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_fswatcher) which is a method to listen to changes inside a specific working file, I will use a [`regex`](https://www.w3schools.com/jsref/jsref_obj_regexp.asp) to return only the changes when `//  `  will be found. When this pattern of characters will be found in what the method returns, it will returns the `pseudo-code` I'm writing. EDIT: It will also gets the code that I place in comment (such as my `console.log()`).
 
 
 
@@ -227,7 +227,6 @@ function y(){
 **Reframing 1.2:**
 
 For now,  this is what happens on the website:
-
 First, the website displays this loading page. It waits until the ml5 script sends its predictions to the server. 
 
 ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender/pixabay/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-04%20%C3%A0%2019.26.49.png)
@@ -236,7 +235,31 @@ Then, the website displays both the images at the left and the text on the right
 
 ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender/pixabay/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-04%20%C3%A0%2019.28.37.png)
 
-------
+
+
+# 2018-11-05
 
 
 
+However, I need first to fix a few stuffs about the core logic of the bot. First, I need at which fequency the bot will read the words; and how it will *turn the pages.* 
+
+1. How the bot will *read* the words:
+
+   For now, all my server side code is wrapped up inside a function, getting called via a `setInterval()`. This function starts to read the txtfile and then process the rest. However, it takes time to fetch the images and run the classifier, so for the bot to actually render something, the interval need to be quite long. 
+
+   This happens on the `server-side` because it's on the server side that the OCR and the Google images scrapping are launched.For now, here's the code where the function is launched:
+
+   ```
+   setInterval(function() {
+     runTheBot();
+   }, 5000);
+   ```
+
+   In order to manage the time processing, I was thinking of countting all the words from the page, and transfering them in seconds. If there's 781 words then, the script will run every interval of 781 seconds. To do this, I added the variable storing the number of words in the [global scope](https://www.w3schools.com/js/js_scope.asp) of the program so that I could use it everywhere. I consequently now need to do this:
+
+   ```
+   setInterval(function() {
+     let IntervalOfThePage = numberOfWordsInThePage;
+     runTheBot();
+   }, IntervalOfThePage);
+   ```
