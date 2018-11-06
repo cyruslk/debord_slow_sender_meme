@@ -282,4 +282,15 @@ Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://hero
 
 EDIT: heroku is always a pain in the *** to use and I wasn't able to push my files to the URL I created (`https://ocr-slow-sender.herokuapp.com/`) even if the cryptic messages looked promising. I asked some help on stackoverflow and waiting for the response.
 
-In the meantime, I'm thinking of different ways to embed both images and texts together and the idea of creating memes seems quite interesting for several reasons.
+In the meantime, I'm thinking of different ways to embed both images and texts together and the idea of creating memes seems quite interesting for several reasons. 
+
+------
+
+**Image of a stock photo here:**
+
+![alt text](https://thumbs.dreamstime.com/z/depression-7767069.jpg)
+
+
+**Image of a meme here:**
+
+![alt text](https://i1.wp.com/blogs.techsmith.com/wp-content/uploads/2016/09/what-is-a-meme.jpg?resize=640%2C480)
