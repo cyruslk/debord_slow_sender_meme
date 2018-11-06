@@ -279,3 +279,7 @@ So the bot is almost finished and I now need to do the following things:
 ------
 
 Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://heroku.com) app for the project.  
+
+EDIT: heroku is always a pain in the *** to use and I wasn't able to push my files to the URL I created (`https://ocr-slow-sender.herokuapp.com/`) even if the cryptic messages looked promising. I asked some help on stackoverflow and waiting for the response.
+
+In the meantime, I'm thinking of different ways to embed both images and texts together and the idea of creating memes seems quite interesting for several reasons.
