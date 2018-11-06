@@ -9,7 +9,7 @@
     "build": "react-scripts build",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm server\" \"npm client\"",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "axios": "^0.18.0",
