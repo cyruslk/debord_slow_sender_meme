@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "client": "cd client && npm start",
     "build": "react-scripts build",
     "server": "nodemon server.js",
