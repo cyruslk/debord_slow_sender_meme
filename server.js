@@ -44,6 +44,7 @@ function runTheBot(){
          }
           const pageArray = text.split(" ");
           numberOfWordsInThePage = text.split(" ").length;
+          console.log("this here", numberOfWordsInThePage);
 
           fs.readFile('db/counter.txt', function read(err, data) {
             if (err) {
@@ -103,11 +104,12 @@ function runTheBot(){
 }
 
 
-setInterval(function() {
-  let IntervalOfThePage = numberOfWordsInThePage;
-  runTheBot();
-}, IntervalOfThePage);
 
+
+  setInterval(function() {
+    console.log("this there", numberOfWordsInThePage);
+    runTheBot();
+  }, 30000 || numberOfWordsInThePage);
 
 
 
