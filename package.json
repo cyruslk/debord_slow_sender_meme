@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "proxy": "http://localhost:5000",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "client": "cd client && npm start",
@@ -11,7 +10,6 @@
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm server\" \"npm client\"",
     "heroku-postbuild": "cd client && npm install && npm run build"
-
   },
   "dependencies": {
     "axios": "^0.18.0",
