@@ -273,5 +273,9 @@ So the bot is almost finished and I now need to do the following things:
 
 - [x] Merge the pixabay branch with the master branch in order to centralize the logs + the files
   - [ ] Question: What happens when these branchs are merged in the context of MDMA? This means that some trajectories are erased from the documentation?
-- [ ] Starting now, I will use `heroku` to push the working version on the master online.
+- [x] Starting now, I will use `heroku` to push the working version on the master online.
 - [ ] From now, work on the idea to have images with their written inscriptions (classifications). Instead of Google Images, it could be `stockphotos`, instead of `stockphotos`, it could be `memes`.
+
+------
+
+Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://heroku.com) app for the project. 
