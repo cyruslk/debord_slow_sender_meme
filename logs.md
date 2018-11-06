@@ -278,4 +278,4 @@ So the bot is almost finished and I now need to do the following things:
 
 ------
 
-Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://heroku.com) app for the project. 
+Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://heroku.com) app for the project.  
