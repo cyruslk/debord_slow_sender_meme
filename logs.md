@@ -274,7 +274,7 @@ So the bot is almost finished and I now need to do the following things:
 - [x] Merge the pixabay branch with the master branch in order to centralize the logs + the files
   - [ ] Question: What happens when these branchs are merged in the context of MDMA? This means that some trajectories are erased from the documentation?
 - [x] Starting now, I will use `heroku` to push the working version on the master online.
-- [ ] From now, work on the idea to have images with their written inscriptions (classifications). Instead of Google Images, it could be `stockphotos`, instead of `stockphotos`, it could be `memes`.
+- [x] From now, work on the idea to have images with their written inscriptions (classifications). Instead of Google Images, it could be `stockphotos`, instead of `stockphotos`, it could be `memes`.
 
 ------
 
@@ -282,15 +282,22 @@ Using `heroku git:remote -a ocr-slow-sender`, I created an [heroku](https://hero
 
 EDIT: heroku is always a pain in the *** to use and I wasn't able to push my files to the URL I created (`https://ocr-slow-sender.herokuapp.com/`) even if the cryptic messages looked promising. I asked some help on stackoverflow and waiting for the response.
 
-In the meantime, I'm thinking of different ways to embed both images and texts together and the idea of creating memes seems quite interesting for several reasons. 
+In the meantime, I'm thinking of different ways to embed both images and texts together and the idea of creating memes seems quite interesting for a specific reason:
+
+- It has both **one** image and **two** blocks of distinct texts (or words). In the context of the project, there's a data translation happening from three different components: a) the initial word, b) the image translation, c) the text coming from the classifier.
+
+  In these memes, the full trajectory of the project will be embeded, encapsulating in the same image the three stages of the translation/chain.
 
 ------
-
-**Image of a stock photo here:**
-
-![alt text](https://thumbs.dreamstime.com/z/depression-7767069.jpg)
 
 
 **Image of a meme here:**
 
 ![alt text](https://i1.wp.com/blogs.techsmith.com/wp-content/uploads/2016/09/what-is-a-meme.jpg?resize=640%2C480)
+
+
+
+
+I like memes for several reasons:
+
+1. 
