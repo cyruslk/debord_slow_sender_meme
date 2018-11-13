@@ -67,6 +67,8 @@ function runTheBot(){
               }
                const counterWord = Number(data.toString('utf8'));
             });
+
+            console.log(pageArray[counterWord], "this");
               google.list({
                   keyword: `${pageArray[counterWord]}`,
                   num: 1,
