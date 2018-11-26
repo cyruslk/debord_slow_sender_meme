@@ -297,7 +297,29 @@ In the meantime, I'm thinking of different ways to embed both images and texts t
 
 
 
+# 2018-11-25
 
-I like memes for several reasons:
 
-1. 
+Need to finish this meme project. The idea that I envision for now is to have a simple black background with all the memes displayed. I think the core logic behind the "turning pages" thing is here - now need to build the logic behind the creation of memes. I'm first going to clean up a bit my messy code; might as well start from scratch if its too complicated.
+
+Anywway, the procedurality is this now **(on the backend | running on the server)**
+
+1. Get the page
+2. Get the word
+3. Get the image
+4. Get the classifier interpretation
+5. Create the meme!
+6. Upload the meme on the webpage
+
+In the meantime, what happen on the **front-side**:
+
+1. Load until the route getting all the memes are fetched in the `componentDidMount()`
+2. Display the memes
+
+------
+
+
+
+![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/files/CommentairesSurLaSocieteDuSpectacle-1.png)
+
+- This is the first page of the book. If the bot starts from the begining, it will therefore take the first word of this page: "Guy". "Guy" will be use to perform an image request.
