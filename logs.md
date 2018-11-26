@@ -337,3 +337,7 @@ In the meantime, what happen on the **front-side**:
 4. Then, using [this npm package](https://www.npmjs.com/package/google-translate-api), I will convert the english label to its french translation.
 
 
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-25%20%C3%A0%2022.49.25.png)
+
+5. For this word, this will be the final output (now need to find a way to create memes). What I like with this idea is that the image both contain indications regarding the starting point and the end point of this chain. I'll go back to this soon, now it's time for some code
+
