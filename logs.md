@@ -331,3 +331,9 @@ In the meantime, what happen on the **front-side**:
 
 3. This image will then go to the ml5 classifier. From [this online demo](https://ml5js.org/), this is what is returned when I upload the image: "bow tie, bow-tie, bowtie with a confidence of 43.21%."  I'll get the first label: *bow tie*.
 
+
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-25%20%C3%A0%2022.40.04.png)
+
+4. Then, using [this npm package](https://www.npmjs.com/package/google-translate-api), I will convert the english label to its french translation.
+
+
