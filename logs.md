@@ -320,7 +320,14 @@ In the meantime, what happen on the **front-side**:
 
 
 
-![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/files/CommentairesSurLaSocieteDuSpectacle-1.png)
+1. The bot starts. This is the first page of the book:
 
-- This is the first page of the book. If the bot starts from the begining, it will therefore take the first word of this page: "Guy". "Guy" will be use as an input to perform an image request.
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/files/CommentairesSurLaSocieteDuSpectacle-1.png)
+
+2. The first word of the page is: "Guy". "Guy" will be use as an input to perform an image request on pixabay (to be decided), When I search for this word on the pixabay API, this is returned first:
+
+
+   ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/img_process/Capture%20d%E2%80%99%C3%A9cran%202018-11-25%20%C3%A0%2022.16.41.png)
+
+3. This image will then go to the ml5 classifier. From [this online demo](https://ml5js.org/), this is what is returned when I upload the image: "bow tie, bow-tie, bowtie with a confidence of 43.21%."  I'll get the first label: *bow tie*.
 
