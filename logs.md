@@ -322,4 +322,5 @@ In the meantime, what happen on the **front-side**:
 
 ![alt text](https://raw.githubusercontent.com/cyruslk/debord_slow_sender_meme/master/files/CommentairesSurLaSocieteDuSpectacle-1.png)
 
-- This is the first page of the book. If the bot starts from the begining, it will therefore take the first word of this page: "Guy". "Guy" will be use to perform an image request.
+- This is the first page of the book. If the bot starts from the begining, it will therefore take the first word of this page: "Guy". "Guy" will be use as an input to perform an image request.
+
