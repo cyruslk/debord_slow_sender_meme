@@ -1,34 +1,6 @@
 
 
-.words{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-}
-
-
-.main{
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.main section{
-  width: 50vw;
-  overflow-wrap: break-word;
-  padding: 1vw;
-}
-
-.left_side{
-  background-color: black;
-}
-
 img{
   padding: 0.2vw;
-}
-
-span{
-  text-transform: lowercase;
+  width: 50vw;
 }

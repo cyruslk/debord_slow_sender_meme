@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import img from "./img.jpg";
+// Importing ml5.js as ml5
 import * as ml5 from "ml5";
-
 
 class App extends Component {
   state = {
-    predictions: [],
-    responseImg: "",
-    responseTxts: ""
-
+    predictions: []  // Set the empty array predictions state
   }
 
   setPredictions = (pred) => {
+    // Set the prediction state with the model predictions
     this.setState({
       predictions: pred
     });
@@ -34,23 +32,6 @@ class App extends Component {
 
   componentDidMount(){
     this.classifyImg();
-
-    fetch('/api/img')
-    .then((res) => { return res.json(); })
-    .then((responseJson) => {
-      const arrayOfLinks = responseJson.express;
-      this.setState({
-        responseImg: arrayOfLinks
-      })
-    });
-    fetch('/api/words')
-    .then((res) => { return res.json(); })
-    .then((responseJson) => {
-      const arrayOfWords = responseJson.express;
-      this.setState({
-        responseTxts: arrayOfWords
-      })
-    });
   }
 
 
@@ -72,41 +53,35 @@ class App extends Component {
 
 
   render() {
-      if(this.state.predictions.length === 0){
+
+
+    let predictions = (<div className="loader"></div>);
+    if(this.state.predictions.length > 0){
+
+
+      const mostAccurate =  this.state.predictions[0]["className"];
+      this.sendDataBackToServer(mostAccurate);
+
+
+
+      predictions = this.state.predictions.map((pred, i) => {
+        let { className, probability } = pred;
+        probability = Math.floor(probability * 10000) / 100 + "%";
         return (
-          <div className="words">
-            <img src={ img } id="image" style={{display: "none"}} alt="" />
-            loading
-          </div>
+          <div key={ i + "" }>{ i+1 }. Prediction: { className } at { probability } </div>
         )
-      }else{
-        const mostAccurate =  this.state.predictions[0]["className"];
-        console.log(mostAccurate, "-------");
-        this.sendDataBackToServer(mostAccurate);
-        console.log("predictions sent to the server");
+      })
 
-        const imgs = this.state.responseImg.map((ele, index) => {
-            return (
-              <img src={ele} key={index} />
-            )
-          })
-        const txts = this.state.responseTxts.map((ele, index) => {
-            return (
-              <span key={index}>{ele} </span>
-            )
-          })
+    }
 
-       return (
-         <div className="main">
-            <section className="left_side">
-              {imgs}
-            </section>
-            <section className="right_side">
-              {txts}
-            </section>
-         </div>
-       )
-      }
+    return (
+
+      <div className="App">
+      <h1>Image classification with ML5.js</h1>
+      <img src={ img } id="image" width="400" alt="" />
+      { predictions }
+      </div>
+    );
   }
 }
 

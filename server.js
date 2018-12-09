@@ -1,4 +1,6 @@
 const express = require('express');
+const recognize = require('tesseractocr')
+const translate = require('google-translate-api');
 const app = express();
 const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
@@ -6,8 +8,15 @@ const bodyParser = require('body-parser');
 var fs = require('fs');
     request = require('request');
 
-const searchImages = require('pixabay-api');
-const axios = require('axios');
+const GoogleImages = require('google-images');
+
+const CONFIG = require('./config.js');
+var CSEID = CONFIG.CSEID;
+var APIKEY = CONFIG.APIKEY;
+
+const client = new GoogleImages(CSEID, APIKEY);
+
+let memeMaker = require('meme-maker')
 
 
 app.use(bodyParser.json());
@@ -18,133 +27,114 @@ app.use(function(req, res, next) {
  next();
 });
 
-
-var tesseract = require('node-tesseract');
-var Scraper = require ('images-scraper')
-  , google = new Scraper.Google();
-
-
 let link;
 let pageNumber;
+let counterWord;
 let numberOfWordsInThePage;
+let initialWord;
+let alteredWord;
 
-function runTheBot(){
+
+setInterval(function runTheBot(){
 
   fs.readFile('db/currentPage.txt', function read(err, data) {
       if (err) {
           throw err;
       }
       pageNumber = Number(data.toString('utf8'));
+      link = `files/CommentairesSurLaSocieteDuSpectacle-${pageNumber}.png`;
 
-      link = `'files/CommentairesSurLaSocieteDuSpectacle-${pageNumber}.png'`;
-
-      tesseract.process(link, (err, text) => {
+      recognize(link, (err, text) => {
          if(err){
              return console.log("An error occured: ", err);
          }
+
           const pageArray = text.split(" ");
           numberOfWordsInThePage = text.split(" ").length;
-          console.log("this here", numberOfWordsInThePage);
 
           fs.readFile('db/counter.txt', function read(err, data) {
             if (err) {
                 throw err;
             }
-            const counterWord = Number(data.toString('utf8'));
-            // console.log(counterWord, numberOfWordsInThePage);
+            counterWord = Number(data.toString('utf8'));
 
             if(counterWord === numberOfWordsInThePage){
-              fs.writeFile('db/currentPage.txt', `${pageNumber+1}`, function(err) {
-                console.log("changing page");
-              })
-              fs.writeFile('db/counter.txt', `0`, function(err) {
-                console.log("resetting the counter");
-              })
+                fs.writeFile('db/currentPage.txt', `${pageNumber+1}`, function(err) {
+                  console.log("changing page");
+                })
+                fs.writeFile('db/counter.txt', `0`, function(err) {
+                  console.log("resetting the counter");
+                })
             }
             fs.readFile('db/counter.txt', function read(err, data) {
               if (err) {
                   throw err;
               }
-               const counterWord = Number(data.toString('utf8'));
-            });
+              initialWord = pageArray[counterWord];
+              client.search(initialWord, {size: 'xxlarge'})
+              	.then(images => {
 
-            console.log(pageArray[counterWord], "this");
-              google.list({
-                  keyword: `${pageArray[counterWord]}`,
-                  num: 1,
-                  detail: true,
-                  nightmare: {
-                      show: false
-                  }
+                  const randomImageFromTheWord =
+                  images[Math.floor(images.length * Math.random())].url
+                  console.log(randomImageFromTheWord);
+                  console.log("sent to the client");
 
-                })
-                .then(function (res) {
-                    const currentImageUrl = `${res[0].thumb_url} `;
-                    fs.appendFile('db/links.txt', currentImageUrl, function (err) {
-                      if (err) throw err;
-                      console.log('Saved: db/links.txt');
-                    });
-                    var download = function(uri, filename, callback){
-                      request.head(uri, function(err, res, body){
+                  var download = function(uri, filename, callback){
+                    request.head(uri, function(err, res, body){
                       console.log('content-type:', res.headers['content-type']);
                       console.log('content-length:', res.headers['content-length']);
-                        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-                      });
-                    };
-                    download(`${currentImageUrl}`, 'client/src/img.jpg', function(){
-                      console.log("02. getting the local version of the img");
-                      fs.writeFile('db/counter.txt', `${counterWord+1}`, function(err) {
-                        // console.log("incrementing the counter");
-                      })
+                      request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                     });
-              }).catch(function(err) {
-                  console.log('err', err);
-              });
+                  };
+                  download(`${randomImageFromTheWord}`, 'client/src/img.jpg', function(){
+                    console.log("02. getting the local version of the img");
+                    fs.writeFile('db/counter.txt', `${counterWord+1}`, function(err) {
+                       console.log("incrementing the counter");
+                     })
+                  });
+              	});
+            });
           });
       });
   });
-}
+},30000)
 
 
-
-
-  setInterval(function() {
-    console.log("this there", numberOfWordsInThePage);
-    runTheBot();
-  }, 30000 || numberOfWordsInThePage);
-
-
-
-var imagesLinks;
-fs.readFile('db/links.txt', function read(err, data) {
-    if (err) {
-        throw err;
-    }
-    imagesLinks = data.toString('utf8').split(" ");
-});
-app.get('/api/img', (req, res) => {
-    res.send({ express: imagesLinks });
-});
 
 app.post('/classifier', (req, res) => {
     const firstPrediction = req.body.data.split(", ")[0];
-    console.log(firstPrediction);
-    fs.appendFile('db/words.txt', `${firstPrediction} `, function (err) {
-      if (err) throw err;
-      console.log('Saved: db/words.txt');
+    alteredWord = firstPrediction.toUpperCase();
+    console.log("--", initialWord, alteredWord, counterWord, pageNumber);
+
+
+
+    let options = {
+      image: 'client/src/img.jpg',         // Required
+      outfile: `img_final${counterWord}-${pageNumber}.jpg`,  // Required
+      topText: `${initialWord.toUpperCase()}`,            // Required
+      bottomText: `${alteredWord.toUpperCase()}`,          // Optional
+      fontSize: 70,                   // Optional
+      fontFill: '#FFF',               // Optional
+      textPos: 'center',              // Optional
+      strokeColor: '#000',            // Optional
+      strokeWeight: 2                 // Optional
+    }
+
+    memeMaker(options, function(err) {
+      if(err) throw new Error(err)
+      console.log('Image saved: ' + options.outfile)
     });
+
+
+    //
+    // fs.appendFile('db/words.txt', `${firstPrediction} `, function (err) {
+    //   if (err) throw err;
+    // });
 })
 
-var wordsProcessed;
-    fs.readFile('db/words.txt', function read(err, data) {
-      if (err) {
-          throw err;
-      }
-      wordsProcessed = data.toString('utf8').split(" ");
-  });
-  app.get('/api/words', (req, res) => {
-    res.send({ express: wordsProcessed });
-  });
+
+
+
 
 
 app.listen(port, () => {
