@@ -15,7 +15,6 @@ var CSEID = CONFIG.CSEID;
 var APIKEY = CONFIG.APIKEY;
 
 const client = new GoogleImages(CSEID, APIKEY);
-
 let memeMaker = require('meme-maker')
 
 
@@ -48,7 +47,6 @@ setInterval(function runTheBot(){
          if(err){
              return console.log("An error occured: ", err);
          }
-
           const pageArray = text.split(" ");
           numberOfWordsInThePage = text.split(" ").length;
 
@@ -76,13 +74,10 @@ setInterval(function runTheBot(){
 
                   const randomImageFromTheWord =
                   images[Math.floor(images.length * Math.random())].url
-                  console.log(randomImageFromTheWord);
                   console.log("sent to the client");
 
                   var download = function(uri, filename, callback){
                     request.head(uri, function(err, res, body){
-                      console.log('content-type:', res.headers['content-type']);
-                      console.log('content-length:', res.headers['content-length']);
                       request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                     });
                   };
@@ -106,8 +101,6 @@ app.post('/classifier', (req, res) => {
     alteredWord = firstPrediction.toUpperCase();
     console.log("--", initialWord, alteredWord, counterWord, pageNumber);
 
-
-
     let options = {
       image: 'client/src/img.jpg',         // Required
       outfile: `img_final${counterWord}-${pageNumber}.jpg`,  // Required
@@ -124,12 +117,6 @@ app.post('/classifier', (req, res) => {
       if(err) throw new Error(err)
       console.log('Image saved: ' + options.outfile)
     });
-
-
-    //
-    // fs.appendFile('db/words.txt', `${firstPrediction} `, function (err) {
-    //   if (err) throw err;
-    // });
 })
 
 

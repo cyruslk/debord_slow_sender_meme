@@ -139,7 +139,7 @@ Stuffs that need to be decided:
 
 Stuffs that need to be fixed:
 
-- [ ] It's only when the prediction is made than the counter should increment
+- [x] It's only when the prediction is made than the counter should increment
 
 
 # 2018-10-29
@@ -351,7 +351,14 @@ pick web site horizontal bar horizontal bar envelope web site face powder book j
 
 - For now, this is actual status of the client interface. It gets all the words located in the `db/words.txt` folder and displays them on the right; as well as displaying the images on the left. Here are printscreens of the current app:
 
-------
+
+
+# 2018-12-09
+
+Working on the code to create the (meme) sequence. 
+I decided to go back to to Google Images
+
+
 
 https://github.com/vadimdemedes/google-images
 

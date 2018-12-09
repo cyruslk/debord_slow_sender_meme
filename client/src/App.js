@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import img from "./img.jpg";
-// Importing ml5.js as ml5
 import * as ml5 from "ml5";
 
 class App extends Component {
