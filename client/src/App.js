@@ -5,11 +5,10 @@ import * as ml5 from "ml5";
 
 class App extends Component {
   state = {
-    predictions: []  // Set the empty array predictions state
+    predictions: []
   }
 
   setPredictions = (pred) => {
-    // Set the prediction state with the model predictions
     this.setState({
       predictions: pred
     });
@@ -76,8 +75,7 @@ class App extends Component {
     return (
 
       <div className="App">
-      <h1>Image classification with ML5.js</h1>
-      <img src={ img } id="image" width="400" alt="" />
+      <img src={ img } id="image" alt="" />
       { predictions }
       </div>
     );

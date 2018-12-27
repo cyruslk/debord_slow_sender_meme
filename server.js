@@ -1,6 +1,6 @@
 const express = require('express');
 const recognize = require('tesseractocr')
-const translate = require('google-translate-api');
+const translate = require('translate');
 const app = express();
 const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
@@ -95,28 +95,32 @@ setInterval(function runTheBot(){
 },30000)
 
 
+translate.engine = 'yandex';
+translate.key = CONFIG.YENDEXKEY;
+
 
 app.post('/classifier', (req, res) => {
     const firstPrediction = req.body.data.split(", ")[0];
     alteredWord = firstPrediction.toUpperCase();
-    console.log("--", initialWord, alteredWord, counterWord, pageNumber);
+    console.log(alteredWord, "this defined?");
 
-    let options = {
-      image: 'client/src/img.jpg',         // Required
-      outfile: `img_final${counterWord}-${pageNumber}.jpg`,  // Required
-      topText: `${initialWord.toUpperCase()}`,            // Required
-      bottomText: `${alteredWord.toUpperCase()}`,          // Optional
-      fontSize: 70,                   // Optional
-      fontFill: '#FFF',               // Optional
-      textPos: 'center',              // Optional
-      strokeColor: '#000',            // Optional
-      strokeWeight: 2                 // Optional
-    }
 
-    memeMaker(options, function(err) {
-      if(err) throw new Error(err)
-      console.log('Image saved: ' + options.outfile)
-    });
+    // let options = {
+    //   image: 'client/src/img.jpg',         // Required
+    //   outfile: `memes_process/img_final${counterWord}-${pageNumber}.jpg`,  // Required
+    //   topText: `${initialWord.toUpperCase()}`,            // Required
+    //   bottomText: `${returnTranslatedWord(alteredWord.toUpperCase())}`,          // Optional
+    //   fontSize: 70,                   // Optional
+    //   fontFill: '#FFF',               // Optional
+    //   textPos: 'center',              // Optional
+    //   strokeColor: '#000',            // Optional
+    //   strokeWeight: 2                 // Optional
+    // }
+    //
+    // memeMaker(options, function(err) {
+    //   if(err) throw new Error(err)
+    //   console.log('Image saved: ' + options.outfile)
+    // });
 })
 
 
