@@ -19,6 +19,7 @@
     "google-translate-api": "^2.3.0",
     "images-scraper": "^2.0.11",
     "meme-maker": "^2.1.2",
+    "merge-md": "^1.0.3",
     "ml5": "^0.1.1",
     "node-tesseract": "^0.2.7",
     "nodecr": "0.0.5",
