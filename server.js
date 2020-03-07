@@ -3,11 +3,21 @@ const app = express();
 const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
-var fs = require('fs');
-    request = require('request');
-
+var natural = require('natural');
+var tokenizer = new natural.WordTokenizer();
+const fs = require('fs');
+const path = require("path");
+const request = require('request');
 const searchImages = require('pixabay-api');
 const axios = require('axios');
+const tesseract = require('node-tesseract');
+const Scraper = require ('images-scraper');
+const google = new Scraper.Google();
+const config = require('./config.js');
+const {MongoClient} = require("mongodb");
+const connectionURL = config.mongoConnectionURL;
+const databaseName = config.mongoDatabaseName;
+const collectionCounter = config.mongodbCollectionCounter;
 
 
 app.use(bodyParser.json());
@@ -18,133 +28,51 @@ app.use(function(req, res, next) {
  next();
 });
 
+let wordReference;
 
-var tesseract = require('node-tesseract');
-var Scraper = require ('images-scraper')
-  , google = new Scraper.Google();
+const runTheBot = () => {
+  connectToTheDb();
+};
 
-
-let link;
-let pageNumber;
-let numberOfWordsInThePage;
-
-function runTheBot(){
-
-  fs.readFile('db/currentPage.txt', function read(err, data) {
-      if (err) {
-          throw err;
-      }
-      pageNumber = Number(data.toString('utf8'));
-
-      link = `'files/CommentairesSurLaSocieteDuSpectacle-${pageNumber}.png'`;
-
-      tesseract.process(link, (err, text) => {
-         if(err){
-             return console.log("An error occured: ", err);
-         }
-          const pageArray = text.split(" ");
-          numberOfWordsInThePage = text.split(" ").length;
-          console.log("this here", numberOfWordsInThePage);
-
-          fs.readFile('db/counter.txt', function read(err, data) {
-            if (err) {
-                throw err;
-            }
-            const counterWord = Number(data.toString('utf8'));
-            // console.log(counterWord, numberOfWordsInThePage);
-
-            if(counterWord === numberOfWordsInThePage){
-              fs.writeFile('db/currentPage.txt', `${pageNumber+1}`, function(err) {
-                console.log("changing page");
-              })
-              fs.writeFile('db/counter.txt', `0`, function(err) {
-                console.log("resetting the counter");
-              })
-            }
-            fs.readFile('db/counter.txt', function read(err, data) {
-              if (err) {
-                  throw err;
-              }
-               const counterWord = Number(data.toString('utf8'));
-            });
-
-            console.log(pageArray[counterWord], "this");
-              google.list({
-                  keyword: `${pageArray[counterWord]}`,
-                  num: 1,
-                  detail: true,
-                  nightmare: {
-                      show: false
-                  }
-
-                })
-                .then(function (res) {
-                    const currentImageUrl = `${res[0].thumb_url} `;
-                    fs.appendFile('db/links.txt', currentImageUrl, function (err) {
-                      if (err) throw err;
-                      console.log('Saved: db/links.txt');
-                    });
-                    var download = function(uri, filename, callback){
-                      request.head(uri, function(err, res, body){
-                      console.log('content-type:', res.headers['content-type']);
-                      console.log('content-length:', res.headers['content-length']);
-                        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-                      });
-                    };
-                    download(`${currentImageUrl}`, 'client/src/img.jpg', function(){
-                      console.log("02. getting the local version of the img");
-                      fs.writeFile('db/counter.txt', `${counterWord+1}`, function(err) {
-                        // console.log("incrementing the counter");
-                      })
-                    });
-              }).catch(function(err) {
-                  console.log('err', err);
-              });
-          });
-      });
+const connectToTheDb = () => {
+  MongoClient.connect(connectionURL, function(err, db) {
+    if (err) throw err;
+    var databaseMongo = db.db(databaseName);
+    databaseMongo.collection(collectionCounter).findOne({}, function(err, result) {
+      if (err) throw err;
+      wordReference = result;
+      return getTheWordOnPdfFile(wordReference)
+      db.close();
+    });
   });
 }
 
+const getTheWordOnPdfFile = (wordReference) => {
+
+  if(wordReference.wordPosition === wordReference.numberOfWordsInPage){
+    // insert in the db;
+    // then run the bot();
+  }
 
 
+  let pageNumberToString = wordReference.pageNumber.toString();
+  let selectedFile = `${pageNumberToString}.txt`;
+  let filePath =  path.join(__dirname, "files", selectedFile);
 
-  setInterval(function() {
-    console.log("this there", numberOfWordsInThePage);
-    runTheBot();
-  }, 30000 || numberOfWordsInThePage);
-
-
-
-var imagesLinks;
-fs.readFile('db/links.txt', function read(err, data) {
-    if (err) {
-        throw err;
-    }
-    imagesLinks = data.toString('utf8').split(" ");
-});
-app.get('/api/img', (req, res) => {
-    res.send({ express: imagesLinks });
-});
-
-app.post('/classifier', (req, res) => {
-    const firstPrediction = req.body.data.split(", ")[0];
-    console.log(firstPrediction);
-    fs.appendFile('db/words.txt', `${firstPrediction} `, function (err) {
-      if (err) throw err;
-      console.log('Saved: db/words.txt');
-    });
-})
-
-var wordsProcessed;
-    fs.readFile('db/words.txt', function read(err, data) {
-      if (err) {
-          throw err;
-      }
-      wordsProcessed = data.toString('utf8').split(" ");
+  fs.readFile(filePath, function read(err, data) {
+       if (err) throw err;
+       let text = data.toString('utf8').replace(/\0/g, '').split(" ");
+       let selectedWord = text[wordReference.wordPosition];
+       return performTheGoogleSearch(selectedWord)
   });
-  app.get('/api/words', (req, res) => {
-    res.send({ express: wordsProcessed });
-  });
+}
+
+const performTheGoogleSearch = (selectedWord) => {
+  console.log(selectedWord);
+}
+
+
+runTheBot();
 
 
 app.listen(port, () => {

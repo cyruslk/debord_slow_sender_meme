@@ -16,6 +16,8 @@
     "express": "^4.16.2",
     "images-scraper": "^2.0.11",
     "ml5": "^0.1.1",
+    "mongodb": "^3.5.4",
+    "natural": "^0.6.3",
     "node-tesseract": "^0.2.7",
     "pixabay-api": "^1.0.4",
     "request": "^2.88.0",
