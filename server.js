@@ -18,6 +18,13 @@ const {MongoClient} = require("mongodb");
 const connectionURL = config.mongoConnectionURL;
 const databaseName = config.mongoDatabaseName;
 const collectionCounter = config.mongodbCollectionCounter;
+const GoogleImages = require('google-images');
+const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
+
+// tensorflow
+const tf = require('@tensorflow/tfjs');
+const mobilenet = require('@tensorflow-models/mobilenet');
+const tfnode = require('@tensorflow/tfjs-node');
 
 
 app.use(bodyParser.json());
@@ -29,6 +36,7 @@ app.use(function(req, res, next) {
 });
 
 let wordReference;
+let imageLink;
 
 const runTheBot = () => {
   connectToTheDb();
@@ -48,13 +56,9 @@ const connectToTheDb = () => {
 }
 
 const getTheWordOnPdfFile = (wordReference) => {
-
   if(wordReference.wordPosition === wordReference.numberOfWordsInPage){
-    // insert in the db;
-    // then run the bot();
+    // then run the bot() again with new counter params;
   }
-
-
   let pageNumberToString = wordReference.pageNumber.toString();
   let selectedFile = `${pageNumberToString}.txt`;
   let filePath =  path.join(__dirname, "files", selectedFile);
@@ -68,8 +72,33 @@ const getTheWordOnPdfFile = (wordReference) => {
 }
 
 const performTheGoogleSearch = (selectedWord) => {
-  console.log(selectedWord);
+  client.search(selectedWord, {size: 'large'})
+  .then(imageArray => {
+    imageLink = imageArray[0];
+    console.log(imageLink);
+  })
+  .then(() => {
+    return performTheImageClassification()
+  })
+};
+
+
+const readImage = path => {
+  const imageBuffer = fs.readFileSync(path);
+  const tfimage = tfnode.node.decodeImage(imageBuffer);
+  return tfimage;
 }
+
+
+const performTheImageClassification = async path  => {
+    const image = readImage("img_to_predict/actual.jpeg");
+    console.log(image);
+     const mobilenetModel = await mobilenet.load();
+     const predictions = await mobilenetModel.classify(image);
+     console.log('Classification Results:', predictions);
+}
+
+
 
 
 runTheBot();
