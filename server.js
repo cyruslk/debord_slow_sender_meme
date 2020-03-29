@@ -17,6 +17,7 @@ const download = require('image-downloader');
 const google = new Scraper.Google();
 const config = require('./config.js');
 const {MongoClient} = require("mongodb");
+const memeMaker = require('meme-maker')
 const connectionURL = config.mongoConnectionURL;
 const databaseName = config.mongoDatabaseName;
 const collectionCounter = config.mongodbCollectionCounter;
@@ -40,6 +41,7 @@ app.use(function(req, res, next) {
 });
 
 let wordReference;
+let word;
 let imageLink;
 let imagePredictions;
 
@@ -72,6 +74,7 @@ const getTheWordOnPdfFile = (wordReference) => {
        if (err) throw err;
        let text = data.toString('utf8').replace(/\0/g, '').split(" ");
        let selectedWord = text[wordReference.wordPosition];
+       word = selectedWord; 
        return performTheGoogleSearch(selectedWord)
   });
 }
@@ -79,9 +82,15 @@ const getTheWordOnPdfFile = (wordReference) => {
 const performTheGoogleSearch = (selectedWord) => {
   client.search(selectedWord, {size: 'large'})
   .then(imageArray => {
-    imageLink = imageArray[0].url
-  })
-  .then(() => {
+    let arrayOfJpegs = imageArray.filter((ele) => {
+      return !ele.url.includes(".png")
+    });
+    console.log(arrayOfJpegs);
+    return arrayOfJpegs; 
+  }).then(arrayOfJpegs => {
+    imageLink = arrayOfJpegs[0].url;   
+    console.log(imageLink);
+  }).then(() => {
     const options = {
       url: imageLink,
       dest: 'img_to_predict/actual.jpg'
@@ -109,13 +118,33 @@ const imageClassification = async path => {
 const translatePrediction = (predictions) => {
   translate(predictions[0].className, { from: 'en', to: 'fr' })
   .then(translatedText => {
-    return makeTheMeme(translatedText);
+    let firsWordOfTranslatedText = translatedText.split(" ")[0];
+    return makeTheMeme(firsWordOfTranslatedText);
   });
 };
 
 const makeTheMeme = (translatedText) => {
+    let options = {
+    image: "img_to_predict/actual.jpg",
+    outfile: "final.jpg", 
+    topText: `${word.toUpperCase()}`, 
+    bottomText: `${translatedText.toUpperCase()}`,
+    fontSize: 70,          
+    fontFill: '#FFF', 
+    textPos: 'center',
+    strokeColor: '#000',
+    strokeWeight: 2   
+  };
 
+  memeMaker(options, (err) => {
+    if(err) throw new Error(err);});
+    return uploadToCloudinary();
 };
+
+const uploadToCloudinary = () => {
+  // upload the image to cloudinary
+};
+
 
 
 runTheBot();
