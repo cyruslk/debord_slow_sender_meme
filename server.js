@@ -21,6 +21,7 @@ const memeMaker = require('meme-maker')
 const connectionURL = config.mongoConnectionURL;
 const databaseName = config.mongoDatabaseName;
 const collectionCounter = config.mongodbCollectionCounter;
+var cloudinary = require('cloudinary').v2;
 const GoogleImages = require('google-images');
 const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
 
@@ -143,6 +144,10 @@ const makeTheMeme = (translatedText) => {
 
 const uploadToCloudinary = () => {
   // upload the image to cloudinary
+  cloudinary.uploader.upload(
+    "sample.jpg", 
+    function(result) { console.log(result) 
+  });
 };
 
 runTheBot();
