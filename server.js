@@ -145,8 +145,6 @@ const uploadToCloudinary = () => {
   // upload the image to cloudinary
 };
 
-
-
 runTheBot();
 
 app.listen(port, () => {

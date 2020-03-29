@@ -139,7 +139,7 @@ Stuffs that need to be decided:
 
 Stuffs that need to be fixed:
 
-- [ ] It's only when the prediction is made than the counter should increment
+- [x] It's only when the prediction is made than the counter should increment
 
 
 # 2018-10-29
@@ -341,3 +341,39 @@ In the meantime, what happen on the **front-side**:
 
 5. For this word, this will be the final output (now need to find a way to create memes). What I like with this idea is that the image both contain indications regarding the starting point and the end point of this chain. I'll go back to this soon, now it's time for some code
 
+
+
+# 2018-12-02
+
+```
+pick web site horizontal bar horizontal bar envelope web site face powder book jacket envelopeseashore rule rule nail web site corkscrew jersey jersey jersey jersey hook hook beaker thimblepot umbrella perfume plastic bag lens cap beaker comic book beaker beaker beaker palacepalace web site web site web site web site lens cap lens cap envelope envelope envelopeenvelope cassette slot digital clock ski mask palace palace sweatshirt sweatshirt spaghettisquash web site pinwheel balloon band aid miniskirt jersey jersey jersey hook street sign website envelope candle golf ball golf ball cuirass hair slide lab coat punching bag packet wall clocknail windsor tie web site puck jersey web site web site web site web site web site web site website web site web site
+```
+
+- For now, this is actual status of the client interface. It gets all the words located in the `db/words.txt` folder and displays them on the right; as well as displaying the images on the left. Here are printscreens of the current app:
+
+
+
+# 2018-12-09
+
+Working on the code to create the (meme) sequence. 
+I decided to go back to to Google Images
+
+
+
+https://github.com/vadimdemedes/google-images
+
+
+```
+const client = new GoogleImages(CSEID, APIKEY);
+
+client.search('THE WORD HERE', {size: 'xxlarge'})
+	.then(images => {
+    console.log(images);
+	});
+```
+
+
+
+https://github.com/JamesTheHacker/meme-maker
+
+https://thoughts.amphibian.com/2015/07/make-memes-via-api-calls.html

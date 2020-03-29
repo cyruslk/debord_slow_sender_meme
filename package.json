@@ -20,7 +20,9 @@
     "meme-maker": "^2.1.2",
     "mongodb": "^3.5.4",
     "natural": "^0.6.3",
+
     "node-tesseract": "^0.2.7",
+    "nodecr": "0.0.5",
     "pixabay-api": "^1.0.4",
     "request": "^2.88.0",
     "socket.io": "^2.1.1",
