@@ -11,7 +11,9 @@ const request = require('request');
 const searchImages = require('pixabay-api');
 const axios = require('axios');
 const tesseract = require('node-tesseract');
+const translate = require('translate');
 const Scraper = require ('images-scraper');
+const download = require('image-downloader');
 const google = new Scraper.Google();
 const config = require('./config.js');
 const {MongoClient} = require("mongodb");
@@ -21,9 +23,12 @@ const collectionCounter = config.mongodbCollectionCounter;
 const GoogleImages = require('google-images');
 const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
 
-// tensorflow
+const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const tfnode = require('@tensorflow/tfjs-node');
+
+translate.engine = 'yandex';
+translate.key = config.yendexKey;
 
 
 app.use(bodyParser.json());
@@ -36,6 +41,7 @@ app.use(function(req, res, next) {
 
 let wordReference;
 let imageLink;
+let imagePredictions;
 
 const runTheBot = () => {
   connectToTheDb();
@@ -56,7 +62,7 @@ const connectToTheDb = () => {
 
 const getTheWordOnPdfFile = (wordReference) => {
   if(wordReference.wordPosition === wordReference.numberOfWordsInPage){
-    // then run the bot() again with new counter params;
+    // then run the bot() again with new counter params; will make this later;
   }
   let pageNumberToString = wordReference.pageNumber.toString();
   let selectedFile = `${pageNumberToString}.txt`;
@@ -73,35 +79,46 @@ const getTheWordOnPdfFile = (wordReference) => {
 const performTheGoogleSearch = (selectedWord) => {
   client.search(selectedWord, {size: 'large'})
   .then(imageArray => {
-    imageLink = imageArray[0];
-    console.log(imageLink);
+    imageLink = imageArray[0].url
   })
   .then(() => {
-    // return performTheImageClassification()
+    const options = {
+      url: imageLink,
+      dest: 'img_to_predict/actual.jpg'
+    }
+    download.image(options)
+      .then(({ filename, image }) => { return imageClassification();})
+      .catch((err) => console.error(err))
   })
 };
 
-
 const readImage = path => {
-  const imageBuffer = fs.readFileSync(path);
+  const imageBuffer = fs.readFileSync("img_to_predict/actual.jpg");
   const tfimage = tfnode.node.decodeImage(imageBuffer);
   return tfimage;
-}
+};
 
+const imageClassification = async path => {
+  const image = readImage(path);
+  const mobilenetModel = await mobilenet.load();
+  const predictions = await mobilenetModel.classify(image);
+  imagePredictions = predictions;
+  return translatePrediction(predictions);
+};
 
-// const performTheImageClassification = async path  => {
-//     const image = readImage("img_to_predict/actual.jpeg");
-//     console.log(image);
-//      const mobilenetModel = await mobilenet.load();
-//      const predictions = await mobilenetModel.classify(image);
-//      console.log('Classification Results:', predictions);
-// }
+const translatePrediction = (predictions) => {
+  translate(predictions[0].className, { from: 'en', to: 'fr' })
+  .then(translatedText => {
+    return makeTheMeme(translatedText);
+  });
+};
 
+const makeTheMeme = (translatedText) => {
 
+};
 
 
 runTheBot();
-
 
 app.listen(port, () => {
   console.log('listening on port ' + port)

@@ -1,32 +1,27 @@
 {
-  "name": "debord_slow_sender",
+  "name": "tensorflow",
   "version": "1.0.0",
-  "proxy": "http://localhost:5000",
   "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "client": "cd client && npm start",
-    "build": "react-scripts build",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm server\" \"npm client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix client && npm run build --prefix client"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@tensorflow-models/mobilenet": "^2.0.4",
     "@tensorflow/tfjs-node": "^1.7.0",
     "axios": "^0.18.0",
     "express": "^4.16.2",
     "google-images": "^2.1.0",
+    "image-downloader": "^3.5.0",
     "images-scraper": "^2.0.11",
-    "ml5": "^0.1.1",
     "mongodb": "^3.5.4",
     "natural": "^0.6.3",
     "node-tesseract": "^0.2.7",
     "pixabay-api": "^1.0.4",
     "request": "^2.88.0",
-    "socket.io": "^2.1.1"
-  },
-  "devDependencies": {
-    "concurrently": "^3.5.0"
+    "socket.io": "^2.1.1",
+    "translate": "^1.1.2"
   }
 }
