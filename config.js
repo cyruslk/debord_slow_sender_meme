@@ -7,5 +7,4 @@ module.exports = {
     mongodbCollectionCounter: "counter_entries",
     googleImageSearchID: "000196214579518959310:vryccwetxle",
     googleImageAPI: "AIzaSyDMEYxZN_kmc96Y1g2elQQLfQHQHpLv_5U",
-
   };

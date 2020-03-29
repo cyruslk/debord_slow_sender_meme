@@ -22,7 +22,6 @@ const GoogleImages = require('google-images');
 const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
 
 // tensorflow
-const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const tfnode = require('@tensorflow/tfjs-node');
 
@@ -78,7 +77,7 @@ const performTheGoogleSearch = (selectedWord) => {
     console.log(imageLink);
   })
   .then(() => {
-    return performTheImageClassification()
+    // return performTheImageClassification()
   })
 };
 
@@ -90,13 +89,13 @@ const readImage = path => {
 }
 
 
-const performTheImageClassification = async path  => {
-    const image = readImage("img_to_predict/actual.jpeg");
-    console.log(image);
-     const mobilenetModel = await mobilenet.load();
-     const predictions = await mobilenetModel.classify(image);
-     console.log('Classification Results:', predictions);
-}
+// const performTheImageClassification = async path  => {
+//     const image = readImage("img_to_predict/actual.jpeg");
+//     console.log(image);
+//      const mobilenetModel = await mobilenet.load();
+//      const predictions = await mobilenetModel.classify(image);
+//      console.log('Classification Results:', predictions);
+// }
 
 
 
