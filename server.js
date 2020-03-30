@@ -7,11 +7,10 @@ var natural = require('natural');
 var tokenizer = new natural.WordTokenizer();
 const fs = require('fs');
 const path = require("path");
-const request = require('request');
+const request = require('request').defaults({encoding: null});
 const searchImages = require('pixabay-api');
 const axios = require('axios');
 const tesseract = require('node-tesseract');
-const translate = require('translate');
 const Scraper = require ('images-scraper');
 const download = require('image-downloader');
 const google = new Scraper.Google();
@@ -24,7 +23,10 @@ const collectionCounter = config.mongodbCollectionCounter;
 var cloudinary = require('cloudinary').v2;
 const GoogleImages = require('google-images');
 const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
+const translate = require("translate");
+const chokidar = require('chokidar');
 
+// tensorflow;
 const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const tfnode = require('@tensorflow/tfjs-node');
@@ -41,6 +43,21 @@ app.use(function(req, res, next) {
  next();
 });
 
+// cloudinary config;
+cloudinary.config({ 
+  cloud_name: config.cloudinaryCloudName, 
+  api_key: config.cloudinaryAPIKey, 
+  api_secret: config.cloudinaryAPISecret 
+});
+
+// chockidar init;
+const watcher = chokidar.watch('file, dir, glob, or array', {
+  ignored: /(^|[\/\\])\../, // ignore dotfiles
+  persistent: true
+});
+const log = console.log.bind(console);
+
+ 
 let wordReference;
 let word;
 let imageLink;
@@ -86,11 +103,9 @@ const performTheGoogleSearch = (selectedWord) => {
     let arrayOfJpegs = imageArray.filter((ele) => {
       return !ele.url.includes(".png")
     });
-    console.log(arrayOfJpegs);
     return arrayOfJpegs; 
   }).then(arrayOfJpegs => {
     imageLink = arrayOfJpegs[0].url;   
-    console.log(imageLink);
   }).then(() => {
     const options = {
       url: imageLink,
@@ -137,18 +152,21 @@ const makeTheMeme = (translatedText) => {
     strokeWeight: 2   
   };
 
-  memeMaker(options, (err) => {
-    if(err) throw new Error(err);});
-    return uploadToCloudinary();
+  memeMaker(options, (err, result) => {
+    if(err) throw new Error(err);});  
+    watcher
+    .on('add', path => {
+      console.log("image added");
+    })
 };
 
-const uploadToCloudinary = () => {
-  // upload the image to cloudinary
-  cloudinary.uploader.upload(
-    "sample.jpg", 
-    function(result) { console.log(result) 
-  });
-};
+// const uploadToCloudinary = () => {
+//   // upload the image to cloudinary
+//     cloudinary.uploader.upload("final.jpg", function(err, result) {
+//         if (err) { console.warn(err); } 
+//         console.log(result.secure_url) 
+//     });
+// };
 
 runTheBot();
 
