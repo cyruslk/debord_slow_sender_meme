@@ -143,7 +143,7 @@ const makeTheMeme = (translatedText) => {
     let options = {
     image: "img_to_predict/actual.jpg",
     outfile: "final.jpg", 
-    topText: `${word.toUpperCase()}`, 
+    topText: `HELLO HELLO HELLO HELLO HELLO EHLOOOO`, 
     bottomText: `${translatedText.toUpperCase()}`,
     fontSize: 70,          
     fontFill: '#FFF', 
@@ -159,6 +159,7 @@ const makeTheMeme = (translatedText) => {
       console.log("image added");
     })
 };
+
 
 // const uploadToCloudinary = () => {
 //   // upload the image to cloudinary
