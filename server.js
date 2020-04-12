@@ -26,6 +26,10 @@ const client = new GoogleImages(config.googleImageSearchID, config.googleImageAP
 const translate = require("translate");
 const chokidar = require('chokidar');
 
+
+// jimp;
+const Jimp = require('jimp');
+
 // tensorflow;
 const tf = require('@tensorflow/tfjs');
 const mobilenet = require('@tensorflow-models/mobilenet');
@@ -68,7 +72,9 @@ const runTheBot = () => {
 };
 
 const connectToTheDb = () => {
-  MongoClient.connect(connectionURL, function(err, db) {
+  MongoClient.connect(connectionURL, 
+    {useUnifiedTopology: true},
+    function(err, db) {
     if (err) throw err;
     var databaseMongo = db.db(databaseName);
     databaseMongo.collection(collectionCounter).findOne({}, function(err, result) {
@@ -105,11 +111,16 @@ const performTheGoogleSearch = (selectedWord) => {
     });
     return arrayOfJpegs; 
   }).then(arrayOfJpegs => {
+
+    // console.log(arrayOfJpegs, "----");
+    // remove images with text here?
+
     imageLink = arrayOfJpegs[0].url;   
+
   }).then(() => {
     const options = {
       url: imageLink,
-      dest: 'img_to_predict/actual.jpg'
+      dest: 'img/actual.jpg'
     }
     download.image(options)
       .then(({ filename, image }) => { return imageClassification();})
@@ -118,7 +129,7 @@ const performTheGoogleSearch = (selectedWord) => {
 };
 
 const readImage = path => {
-  const imageBuffer = fs.readFileSync("img_to_predict/actual.jpg");
+  const imageBuffer = fs.readFileSync("img/actual.jpg");
   const tfimage = tfnode.node.decodeImage(imageBuffer);
   return tfimage;
 };
@@ -139,35 +150,28 @@ const translatePrediction = (predictions) => {
   });
 };
 
-const makeTheMeme = (translatedText) => {
-    let options = {
-    image: "img_to_predict/actual.jpg",
-    outfile: "final.jpg", 
-    topText: `HELLO HELLO HELLO HELLO HELLO EHLOOOO`, 
-    bottomText: `${translatedText.toUpperCase()}`,
-    fontSize: 70,          
-    fontFill: '#FFF', 
-    textPos: 'center',
-    strokeColor: '#000',
-    strokeWeight: 2   
-  };
 
-  memeMaker(options, (err, result) => {
-    if(err) throw new Error(err);});  
-    watcher
-    .on('add', path => {
-      console.log("image added");
-    })
+const makeTheMeme = async (translatedText) => {
+  console.log(translatedText);
+  console.log(word); 
+
+  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+
+  Jimp
+  .read('img/actual.jpg')
+  .then((img) => {
+    console.log("here--")
+    img.write('img/final.jpg');
+  })     
+}
+
+
+const uploadToCloudinary = () => {
+    cloudinary.uploader.upload("final.jpg", function(err, result) {
+        if (err) { console.warn(err); } 
+        console.log(result.secure_url) 
+    });
 };
-
-
-// const uploadToCloudinary = () => {
-//   // upload the image to cloudinary
-//     cloudinary.uploader.upload("final.jpg", function(err, result) {
-//         if (err) { console.warn(err); } 
-//         console.log(result.secure_url) 
-//     });
-// };
 
 runTheBot();
 
