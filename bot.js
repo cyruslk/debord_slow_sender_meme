@@ -39,12 +39,11 @@ translate.key = config.yendexKey;
 
 const outputData = {
   wordReference: null,
+  numberOfWordsInPage: null,
   word: null,
   imageLink: null,
   predictions: null 
 }
-
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -68,71 +67,57 @@ const watcher = chokidar.watch('file, dir, glob, or array', {
 });
 const log = console.log.bind(console);
 
-const runTheBot = () => {
+const runTheBot = () => {  
   getFromTheDb();
 };
 
 const getFromTheDb = () => {
-
   MongoClient.connect(connectionURL, 
     {useUnifiedTopology: true},
-    function(err, db) {
+    (err, db) => {
     if (err) throw err;
     var databaseMongo = db.db(databaseName);
-    databaseMongo.collection(collectionCounter).findOne({}, function(err, result) {
+    databaseMongo.collection(collectionCounter).
+    findOne({}, function(err, result) {
       if (err) throw err;
       outputData.wordReference = result;
-      return getTheWordOnPdfFile(outputData.wordReference);
+      return getTheWordFromPage(outputData.wordReference);
       db.close();
-
     });
   });
-
 }
 
-const getTheWordOnPdfFile = (wordReference) => {
+const getTheWordFromPage = (wordReference) => {
 
-  if(wordReference.wordPosition === 
-    wordReference.numberOfWordsInPage){
-
-    // then run the bot() again with 
-    // new counter params; will make this later;
-
-  }
   let pageNumberToString = wordReference.pageNumber.toString();
   let selectedFile = `${pageNumberToString}.txt`;
   let filePath =  path.join(__dirname, "files", selectedFile);
 
   fs.readFile(filePath, function read(err, data) {
-       if (err) throw err;
-       let text = data.toString('utf8').replace(/\0/g, '').split(" ");
-       let selectedWord = text[wordReference.wordPosition];
-       outputData.word = selectedWord; 
-       return performTheGoogleSearch(selectedWord)
+      if (err) throw err;
+      let text = data.toString('utf8').replace(/\0/g, '').split(" ");
+      let selectedWord = text[wordReference.wordPosition];
+      outputData.word = selectedWord; 
+      outputData.numberOfWordsInPage = text.length;
+      return performTheGoogleSearch(selectedWord)
   });
 }
 
 const performTheGoogleSearch = (selectedWord) => {
-  
-  client.search(selectedWord, {size: 'xxlarge'})
+  client.search(selectedWord, {size: 'xxlarge',lr: 'lang_fr'})
   .then(imageArray => {
     let arrayOfJpegs = imageArray.filter((ele) => {
-      return !ele.url.includes(".png");
+      return ele.url.includes(".jpg")
     });
     return arrayOfJpegs; 
   }).then(arrayOfJpegs => {
-    // maybe change?
-
+    // here, select what will be chosen
+    // return img with best width and minimum height;
     outputData.imageLink = arrayOfJpegs[0].url;  
-
     let mapInside =  arrayOfJpegs.map((ele, index) => {
       open(ele.url);
       return ele.url;
-    });
-
-    console.log(mapInside);
-
-    
+    });   
   }).then(() => {
     const options = {
       url: outputData.imageLink,
@@ -142,51 +127,69 @@ const performTheGoogleSearch = (selectedWord) => {
       .then(({ filename, image }) => { return imageClassification();})
       .catch((err) => console.error(err))
   })
-
 };
 
 const readImage = path => {
-
   const imageBuffer = fs.readFileSync("img/actual.jpg");
   const tfimage = tfnode.node.decodeImage(imageBuffer);
   return tfimage;
-
 };
 
-const imageClassification = async path => {
-  
+const imageClassification = async path => { 
   const image = readImage(path);
   const mobilenetModel = await mobilenet.load();
   const predictions = await mobilenetModel.classify(image);
   outputData.predictions = predictions;
   return translatePrediction(predictions);
-
 };
 
 const translatePrediction = (predictions) => {
-
   translate(predictions[0].className, { from: 'en', to: 'fr' })
   .then(translatedText => {
     let firsWordOfTranslatedText = translatedText.split(" ")[0];
     outputData.translatedPrediction = firsWordOfTranslatedText;
-    return updateTheDb();
+    return insertBotEntry(outputData);
   });
+};
 
+const insertBotEntry = () => {
+  // here, insert the content that relates to the meme;
+  // then, run this v
+  return incrementTheWordPosition(outputData)
 };
 
 
-const uploadToCloudinary = () => {
-    cloudinary.uploader.upload("final.jpg", function(err, result) {
-        if (err) { console.warn(err); } 
-        console.log(result.secure_url) 
-    });
-};
+const incrementTheWordPosition = (outputData) => {
 
-const updateTheDb = () => {
-  console.log(outputData, "---");  
+  let wordPosition = parseInt(outputData.wordReference.wordPosition); 
+  let numberOfWordsInPage = parseInt(outputData.numberOfWordsInPage); 
+
+  MongoClient.connect(connectionURL, 
+    {useUnifiedTopology: true},
+    (err, db) => {
+    if (err) throw err;
+    var databaseMongo = db.db(databaseName);
+    databaseMongo.collection(collectionCounter).
+    updateOne(
+      {id: "counter_bot"},
+      {$set: {
+        wordPosition: wordPosition+1,
+        numberOfWordsInPage: numberOfWordsInPage
+      }}
+    );
+  }); 
+  // console.log("word position updated!");
+  return checkIfPageNeedsToBeTurned()
 }
 
-
+const checkIfPageNeedsToBeTurned = (wordReference) => {
+  // if wordPosition === numberOfWordsInPage-1;
+  // wordPosition = 0
+  // numberOfWordsInPage = 0
+  // pageNumber = pageNumber+1
+  // then runTheBot()
+  // else return;
+};
 
 runTheBot();
 
