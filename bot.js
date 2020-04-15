@@ -99,6 +99,7 @@ const getTheWordFromPage = (wordReference) => {
       let selectedWord = text[wordReference.wordPosition];
       outputData.word = selectedWord; 
       outputData.numberOfWordsInPage = text.length;
+      console.log(selectedWord, outputData);
       return performTheGoogleSearch(selectedWord)
   });
 }
@@ -155,12 +156,16 @@ const translatePrediction = (predictions) => {
 const insertBotEntry = () => {
   // here, insert the content that relates to the meme;
   // then, run this v
+  
+  // if the word is not the final of the page, increment;
+  // otherwise, turn the page and restart the counter;
+  // for both processes, return (ends the code)
+
   return incrementTheWordPosition(outputData)
 };
 
 
 const incrementTheWordPosition = (outputData) => {
-
   let wordPosition = parseInt(outputData.wordReference.wordPosition); 
   let numberOfWordsInPage = parseInt(outputData.numberOfWordsInPage); 
 
@@ -169,6 +174,7 @@ const incrementTheWordPosition = (outputData) => {
     (err, db) => {
     if (err) throw err;
     var databaseMongo = db.db(databaseName);
+
     databaseMongo.collection(collectionCounter).
     updateOne(
       {id: "counter_bot"},
@@ -178,17 +184,25 @@ const incrementTheWordPosition = (outputData) => {
       }}
     );
   }); 
-  // console.log("word position updated!");
-  return checkIfPageNeedsToBeTurned()
-}
+};
 
-const checkIfPageNeedsToBeTurned = (wordReference) => {
-  // if wordPosition === numberOfWordsInPage-1;
-  // wordPosition = 0
-  // numberOfWordsInPage = 0
-  // pageNumber = pageNumber+1
-  // then runTheBot()
-  // else return;
+const turnThePageRestartCounter = (outputData) => {
+  const wordReference = outputData.wordReference;
+    MongoClient.connect(connectionURL, 
+      {useUnifiedTopology: true},
+      (err, db) => {
+      if (err) throw err;
+      var databaseMongo = db.db(databaseName);
+      databaseMongo.collection(collectionCounter).
+      updateOne(
+        {id: "counter_bot"},
+        {$set: {
+          wordPosition: 0,
+          numberOfWordsInPage: 0,
+          pageNumber: wordReference.pageNumber+1
+        }}
+      );
+    })
 };
 
 runTheBot();
