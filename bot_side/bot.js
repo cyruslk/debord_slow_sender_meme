@@ -20,6 +20,7 @@ const memeMaker = require('meme-maker')
 const connectionURL = config.mongoConnectionURL;
 const databaseName = config.mongoDatabaseName;
 const collectionCounter = config.mongodbCollectionCounter;
+const memeEntry = config.memeEntry;
 var cloudinary = require('cloudinary').v2;
 const GoogleImages = require('google-images');
 const client = new GoogleImages(config.googleImageSearchID, config.googleImageAPI);
@@ -99,7 +100,6 @@ const getTheWordFromPage = (wordReference) => {
       let selectedWord = text[wordReference.wordPosition];
       outputData.word = selectedWord; 
       outputData.numberOfWordsInPage = text.length;
-      console.log(selectedWord, outputData);
       return performTheGoogleSearch(selectedWord)
   });
 }
@@ -153,22 +153,33 @@ const translatePrediction = (predictions) => {
   });
 };
 
-const insertBotEntry = () => {
-  // here, insert the content that relates to the meme;
-  // then, run this v
-  
-  // if the word is not the final of the page, increment;
-  // otherwise, turn the page and restart the counter;
-  // for both processes, return (ends the code)
+// will make an API for the db layer soon; refactor in promises; clean everything
+// see https://github.com/aconanlai/gene_tellem/blob/master/src/GeneCanvas.js
 
-  return incrementTheWordPosition(outputData)
+const insertBotEntry = (outputData) => {
+
+  MongoClient.connect(connectionURL, 
+    {useUnifiedTopology: true},
+    (err, db) => {
+    if (err) throw err;
+    var databaseMongo = db.db(databaseName);
+    databaseMongo.collection(memeEntry).
+    insertOne(
+      outputData
+    ).then(() => {
+      if(outputData.wordPosition !== outputData.numberOfWordsInPage-1){
+        return incrementTheWordPosition(outputData);
+      }else{
+        return turnThePageRestartCounter(outputData);
+      }
+    })
+  }); 
 };
 
 
 const incrementTheWordPosition = (outputData) => {
   let wordPosition = parseInt(outputData.wordReference.wordPosition); 
   let numberOfWordsInPage = parseInt(outputData.numberOfWordsInPage); 
-
   MongoClient.connect(connectionURL, 
     {useUnifiedTopology: true},
     (err, db) => {
@@ -202,7 +213,7 @@ const turnThePageRestartCounter = (outputData) => {
           pageNumber: wordReference.pageNumber+1
         }}
       );
-    })
+    });
 };
 
 runTheBot();
