@@ -43,7 +43,7 @@ const outputData = {
   numberOfWordsInPage: null,
   word: null,
   imageLink: null,
-  predictions: null 
+  predictions: null
 }
 
 app.use(bodyParser.json());
@@ -55,10 +55,10 @@ app.use(function(req, res, next) {
 });
 
 // cloudinary config;
-cloudinary.config({ 
-  cloud_name: config.cloudinaryCloudName, 
-  api_key: config.cloudinaryAPIKey, 
-  api_secret: config.cloudinaryAPISecret 
+cloudinary.config({
+  cloud_name: config.cloudinaryCloudName,
+  api_key: config.cloudinaryAPIKey,
+  api_secret: config.cloudinaryAPISecret
 });
 
 // chockidar init;
@@ -68,12 +68,12 @@ const watcher = chokidar.watch('file, dir, glob, or array', {
 });
 const log = console.log.bind(console);
 
-const runTheBot = () => {  
+const runTheBot = () => {
   getFromTheDb();
 };
 
 const getFromTheDb = () => {
-  MongoClient.connect(connectionURL, 
+  MongoClient.connect(connectionURL,
     {useUnifiedTopology: true},
     (err, db) => {
     if (err) throw err;
@@ -98,7 +98,7 @@ const getTheWordFromPage = (wordReference) => {
       if (err) throw err;
       let text = data.toString('utf8').replace(/\0/g, '').split(" ");
       let selectedWord = text[wordReference.wordPosition];
-      outputData.word = selectedWord; 
+      outputData.word = selectedWord;
       outputData.numberOfWordsInPage = text.length;
       return performTheGoogleSearch(selectedWord)
   });
@@ -110,15 +110,13 @@ const performTheGoogleSearch = (selectedWord) => {
     let arrayOfJpegs = imageArray.filter((ele) => {
       return ele.url.includes(".jpg")
     });
-    return arrayOfJpegs; 
+    return arrayOfJpegs;
   }).then(arrayOfJpegs => {
-    // here, select what will be chosen
-    // return img with best width and minimum height;
-    outputData.imageLink = arrayOfJpegs[0].url;  
-    let mapInside =  arrayOfJpegs.map((ele, index) => {
-      open(ele.url);
-      return ele.url;
-    });   
+
+    let returnWidth =  arrayOfJpegs.map((ele, index) => {return ele.width;});
+    let largest = Math.max.apply(Math, returnWidth); // 306
+    let selectedElementPosition = returnWidth.indexOf(largest);
+    outputData.imageLink = arrayOfJpegs[selectedElementPosition].url;
   }).then(() => {
     const options = {
       url: outputData.imageLink,
@@ -130,13 +128,14 @@ const performTheGoogleSearch = (selectedWord) => {
   })
 };
 
+
 const readImage = path => {
   const imageBuffer = fs.readFileSync("img/actual.jpg");
   const tfimage = tfnode.node.decodeImage(imageBuffer);
   return tfimage;
 };
 
-const imageClassification = async path => { 
+const imageClassification = async path => {
   const image = readImage(path);
   const mobilenetModel = await mobilenet.load();
   const predictions = await mobilenetModel.classify(image);
@@ -157,8 +156,7 @@ const translatePrediction = (predictions) => {
 // see https://github.com/aconanlai/gene_tellem/blob/master/src/GeneCanvas.js
 
 const insertBotEntry = (outputData) => {
-
-  MongoClient.connect(connectionURL, 
+  MongoClient.connect(connectionURL,
     {useUnifiedTopology: true},
     (err, db) => {
     if (err) throw err;
@@ -173,14 +171,14 @@ const insertBotEntry = (outputData) => {
         return turnThePageRestartCounter(outputData);
       }
     })
-  }); 
+  });
 };
 
 
 const incrementTheWordPosition = (outputData) => {
-  let wordPosition = parseInt(outputData.wordReference.wordPosition); 
-  let numberOfWordsInPage = parseInt(outputData.numberOfWordsInPage); 
-  MongoClient.connect(connectionURL, 
+  let wordPosition = parseInt(outputData.wordReference.wordPosition);
+  let numberOfWordsInPage = parseInt(outputData.numberOfWordsInPage);
+  MongoClient.connect(connectionURL,
     {useUnifiedTopology: true},
     (err, db) => {
     if (err) throw err;
@@ -194,12 +192,13 @@ const incrementTheWordPosition = (outputData) => {
         numberOfWordsInPage: numberOfWordsInPage
       }}
     );
-  }); 
+  });
+  console.log(outputData);
 };
 
 const turnThePageRestartCounter = (outputData) => {
   const wordReference = outputData.wordReference;
-    MongoClient.connect(connectionURL, 
+    MongoClient.connect(connectionURL,
       {useUnifiedTopology: true},
       (err, db) => {
       if (err) throw err;

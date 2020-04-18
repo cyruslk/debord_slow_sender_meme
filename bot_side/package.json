@@ -18,6 +18,7 @@
     "express": "^4.16.2",
     "google-images": "^2.1.0",
     "image-downloader": "^3.5.0",
+    "image-size": "^0.8.3",
     "images-scraper": "^2.0.11",
     "jimp": "^0.9.8",
     "meme-maker": "^2.1.2",
