@@ -1,6 +1,6 @@
 # Debord_slow_sender_meme:
 
-This project translates the entire `La société du spectacle` book word by word into internet memes. Interested by the process? Please have a look [here](https://github.com/cyruslk/debord_slow_sender_meme/blob/code_v2_cleaner/logs.md) .
+This project translates the entire `La société du spectacle` book word by word into internet memes. Interested by the process? Please have a look [here](https://github.com/cyruslk/debord_slow_sender_meme/blob/master/logs.md) .
 
 Here's what I use for the project:
 
@@ -14,4 +14,3 @@ Here's what I use for the project:
 8. Dataset: `Mobilenet`
 9. Translation: `Yendex`
 10. Making the meme: `Jimp`
-

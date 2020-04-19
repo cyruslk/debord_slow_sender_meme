@@ -167,8 +167,10 @@ const insertBotEntry = (outputData) => {
     ).then(() => {
       if(outputData.wordPosition !== outputData.numberOfWordsInPage-1){
         return incrementTheWordPosition(outputData);
+        console.log("on the website");
       }else{
         return turnThePageRestartCounter(outputData);
+        console.log(outputData);
       }
     })
   });
@@ -193,7 +195,7 @@ const incrementTheWordPosition = (outputData) => {
       }}
     );
   });
-  console.log(outputData);
+  // return endTheProgram();
 };
 
 const turnThePageRestartCounter = (outputData) => {
@@ -217,6 +219,7 @@ const turnThePageRestartCounter = (outputData) => {
 
 runTheBot();
 
-app.listen(port, () => {
+
+const server = app.listen(port, () => {
   console.log('listening on port ' + port)
 });

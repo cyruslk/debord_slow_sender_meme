@@ -1,0 +1,65 @@
+.App {
+  text-align: center;
+}
+
+html, body{
+  background-color: grey;
+};
+
+
+.memes{
+  width: 30vw;
+  display: inline-block;
+  position: relative;
+}
+
+.memes img{
+  width: 20vw;
+}
+
+.memes h1:first-child{
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  text-align: center;
+}
+
+.memes h1:first-child{
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  text-align: center;
+}
+
+.memes h1{
+  font-family: impact;
+  text-transform: uppercase;
+  color: #8A2BE2;
+  -webkit-text-stroke: 1px lime;
+  margin: 0;
+}
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
