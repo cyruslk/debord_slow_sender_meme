@@ -1,3 +1,6 @@
 bot_side/node_modules
 bot_side/config.js
 playground
+client_side/node_modules
+client_side/config.js
+client_side/build
