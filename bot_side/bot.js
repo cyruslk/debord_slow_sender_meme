@@ -214,8 +214,19 @@ const turnThePageRestartCounter = (outputData) => {
           pageNumber: wordReference.pageNumber+1
         }}
       );
+        console.log("inserted ----");      
     });
 };
+
+
+let tweetInterval = Math.round(
+  Math.random() * (3000 - 4000)
+) + 4000;
+
+setInterval(function() {
+  runTheBot()
+}, tweetInterval);
+
 
 runTheBot();
 

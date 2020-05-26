@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@tensorflow-models/mobilenet": "^2.0.4",
-    "@tensorflow/tfjs-node": "^1.7.0",
+    "@tensorflow/tfjs": "^1.7.4",
+    "@tensorflow/tfjs-node": "^1.7.4",
     "axios": "^0.18.0",
     "canvas": "^2.6.1",
     "chokidar": "^3.3.1",
